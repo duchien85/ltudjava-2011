@@ -28,7 +28,7 @@ public class giaodien extends JFrame{
 	private Boolean showComCard=false;	
 	private JSlider slider;
 	
-	public giaodien(final gameEngine ge){
+	public giaodien(final Main ge){
 		super("Java Heart game !");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);		
 		setResizable(false);		

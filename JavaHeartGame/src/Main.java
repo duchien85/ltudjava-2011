@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 
 
-public class gameEngine implements Runnable{
+public class Main implements Runnable{
 	private int currentstep;
 	private int currentturn,firstturn,roundcount;
 	private human player1;
@@ -18,7 +18,7 @@ public class gameEngine implements Runnable{
 	private int[] SignalFlag; //0:card 12:control
 	
 	private int delay=500;
-	public gameEngine(String st){	
+	public Main(String st){
 		player1=new human();
 		player1.setName(st);
 		com1=new computer();
@@ -410,7 +410,7 @@ public class gameEngine implements Runnable{
 		newRound();
 	}
 	public static void main(String[] args){
-		gameEngine gameE=new gameEngine("hehe");
+		Main gameE=new Main("hehe");
 		gameE.newRound();							
 	}
 
