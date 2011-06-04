@@ -75,11 +75,10 @@ public class gameEngine implements Runnable {
 
             // chia bai cho  nguoi choi
             card c = new card(tam);
-            int p = (i-1)  % 4;
+            int p = (i - 1) % 4;
             try {
                 player[p].receiveCard(c);
-            }catch (Exception e){
-
+            } catch (Exception e) {
             }
             gdien.drawAllCard();
             try {
@@ -108,24 +107,24 @@ public class gameEngine implements Runnable {
 
     // shoot the moon
     public void checkShootTheMoon() {
-        for (int i = 0; i <= 3; i++)
-        if (player[i].checkShootTheMoon()) {
-            player[(i+1)%4].addScore(26);
-            player[(i+2)%4].addScore(26);
-            player[(i+3)%4].addScore(26);
-        } 
+        for (int i = 0; i <= 3; i++) {
+            if (player[i].checkShootTheMoon()) {
+                player[(i + 1) % 4].addScore(26);
+                player[(i + 2) % 4].addScore(26);
+                player[(i + 3) % 4].addScore(26);
+            }
+        }
     }
 
     // kiem tra ket thuc van bai (co diem so lon hon hoac bang 100)
     public boolean check100score() {
-         for (int i = 0; i <= 3; i++) {
-                if (player[i].getScore() >= 100) {
-                    return true;
-                }
+        for (int i = 0; i <= 3; i++) {
+            if (player[i].getScore() >= 100) {
+                return true;
             }
-            return false;
         }
-    
+        return false;
+    }
 
     // lay nguoi co diem thap nhat
     public int getMinScore() {
@@ -166,12 +165,11 @@ public class gameEngine implements Runnable {
             }
 
             // reset lai diem so
-            for (int i=0; i<4; i++){
-               player[i].resetScore();
+            for (int i = 0; i < 4; i++) {
+                player[i].resetScore();
             }
         }
     }
-
 
     // kiem tra sau khi 4 nguoi da ra bai
     public void checkEnd4Card() {
@@ -181,7 +179,7 @@ public class gameEngine implements Runnable {
             card winCard = check4cardwin();
 
             // thu bai
-            for (int i=0; i<4; i++){
+            for (int i = 0; i < 4; i++) {
                 if (player[i].isContainCard(winCard.getID())) {
                     player[i].add4scorecard(fourCard);
                     firstturn = i;
@@ -204,7 +202,7 @@ public class gameEngine implements Runnable {
 
     // tinh luot choi tiep theo
     public void nextturn() {
-        currentturn = (currentturn + 1)%4;
+        currentturn = (currentturn + 1) % 4;
     }
 
     // tim nguoi co quan bai 2 bich de di dau tien
