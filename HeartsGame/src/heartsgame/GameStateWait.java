@@ -44,15 +44,21 @@ public class GameStateWait extends GameState {
     public void Update(final GameControl gameControl, final GUI gui) {
         if (gameControl.getType() == GameDef.IS_SERVER) {
             if (gameControl.getServer().getClientCount() == 3) {
-                gameControl.getServer().SendToAllClient("start");
+                gameControl.setViTri(0);
+                gameControl.getServer().SendToClient(0, "start1");
+                gameControl.getServer().SendToClient(1, "start2");
+                gameControl.getServer().SendToClient(2, "start3");
                 gameControl.SwitchState(GameDef.GAME_PLAY);
             }
 
         } else if (gameControl.getType() == GameDef.IS_CLIENT) {
             try {
                 String msg = gameControl.getClient().GetMessage();
-                if (msg.equals("start"))
-                    gameControl.SwitchState(GameDef.GAME_PLAY);                
+                if (msg.startsWith("start")){
+                    int vitri = Integer.parseInt(msg.split("start")[1]);
+                    gameControl.setViTri(vitri);
+                    gameControl.SwitchState(GameDef.GAME_PLAY);
+                }
             } catch (Exception ex) {
                 return;
             }
