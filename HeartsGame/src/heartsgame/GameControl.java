@@ -20,6 +20,9 @@ public class GameControl implements Runnable {
     private Client client;
     private int type;
     private Thread thread;
+    private String playerID;
+    private int viTri;
+
     public static void main(String[] args) {
         GameControl gameControl = new GameControl();
     }
@@ -48,6 +51,10 @@ public class GameControl implements Runnable {
     public void run() {
         while (true) {
             gameState[currentState].Update(this, gui);
+             try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+            }
             gameState[currentState].Draw(this, gui);
              try {
                 Thread.sleep(100);
@@ -57,7 +64,6 @@ public class GameControl implements Runnable {
     }
 
     void SwitchState(int state) {
-
         currentState = state;
         gameState[currentState].Enter();
     }
@@ -126,5 +132,33 @@ public class GameControl implements Runnable {
      */
     public void setThread(Thread thread) {
         this.thread = thread;
+    }
+
+    /**
+     * @return the playerID
+     */
+    public String getPlayerID() {
+        return playerID;
+    }
+
+    /**
+     * @param playerID the playerID to set
+     */
+    public void setPlayerID(String playerID) {
+        this.playerID = playerID;
+    }
+
+    /**
+     * @return the viTri
+     */
+    public int getViTri() {
+        return viTri;
+    }
+
+    /**
+     * @param viTri the viTri to set
+     */
+    public void setViTri(int viTri) {
+        this.viTri = viTri;
     }
 }

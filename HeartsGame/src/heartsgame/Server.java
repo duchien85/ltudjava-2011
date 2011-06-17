@@ -58,7 +58,7 @@ public class Server implements Runnable{
 
     private int findClient(int ID) {
         for (int i = 0; i < getClientCount(); i++) {
-            if (clients[i].getID() == ID) {
+            if (getClients()[i].getID() == ID) {
                 return i;
             }
         }
@@ -68,22 +68,32 @@ public class Server implements Runnable{
     public synchronized void SendToAllClient(String input) {
         for (int i = 0; i < clientCount; i++) {
             if (input.equals(".bye")) {
-                clients[i].send(".bye");
+                getClients()[i].send(".bye");
                 removeAt(i);
             } else {
-                clients[i].send(input);
+                getClients()[i].send(input);
             }
         }
+    }
+
+    public synchronized void SendToClient(int index, String input) {
+        if (input.equals(".bye")) {
+            getClients()[index].send(".bye");
+            removeAt(index);
+        } else {
+            getClients()[index].send(input);
+        }
+
     }
 
     public synchronized void removeAt(int index) {
         int pos = index;
         if (pos >= 0) {
-            ServerThread toTerminate = clients[pos];
+            ServerThread toTerminate = getClients()[pos];
             System.out.println("Removing client thread " + index + " at " + pos);
             if (pos < getClientCount() - 1) {
                 for (int i = pos + 1; i < getClientCount(); i++) {
-                    clients[i - 1] = clients[i];
+                    getClients()[i - 1] = getClients()[i];
                 }
             }
             setClientCount(getClientCount() - 1);
@@ -98,11 +108,11 @@ public class Server implements Runnable{
 
     public synchronized void handle(int ID, String input) {
         if (input.equals(".bye")) {
-            clients[findClient(ID)].send(".bye");
+            getClients()[findClient(ID)].send(".bye");
             remove(ID);
         } else {
             for (int i = 0; i < getClientCount(); i++) {
-                clients[i].send(ID + ": " + input);
+                getClients()[i].send(ID + ": " + input);
             }
         }
     }
@@ -110,11 +120,11 @@ public class Server implements Runnable{
     public synchronized void remove(int ID) {
         int pos = findClient(ID);
         if (pos >= 0) {
-            ServerThread toTerminate = clients[pos];
+            ServerThread toTerminate = getClients()[pos];
             System.out.println("Removing client thread " + ID + " at " + pos);
             if (pos < getClientCount() - 1) {
                 for (int i = pos + 1; i < getClientCount(); i++) {
-                    clients[i - 1] = clients[i];
+                    getClients()[i - 1] = getClients()[i];
                 }
             }
             setClientCount(getClientCount() - 1);
@@ -128,18 +138,18 @@ public class Server implements Runnable{
     }
 
     private void addThread(Socket socket) {
-        if (getClientCount() < clients.length) {
+        if (getClientCount() < getClients().length) {
             System.out.println("Client accepted: " + socket);
-            clients[getClientCount()] = new ServerThread(this, socket);
+            getClients()[getClientCount()] = new ServerThread(this, socket);
             try {
-                clients[getClientCount()].open();
-                clients[getClientCount()].start();
+                getClients()[getClientCount()].open();
+                getClients()[getClientCount()].start();
                 setClientCount(getClientCount() + 1);
             } catch (IOException ioe) {
                 System.out.println("Error opening thread: " + ioe);
             }
         } else {
-            System.out.println("Client refused: maximum " + clients.length + " reached.");
+            System.out.println("Client refused: maximum " + getClients().length + " reached.");
         }
     }
 
@@ -161,6 +171,20 @@ public class Server implements Runnable{
     Server server = null;
 
     server = new Server(8999);
+    }
+
+    /**
+     * @return the clients
+     */
+    public ServerThread[] getClients() {
+        return clients;
+    }
+
+    /**
+     * @param clients the clients to set
+     */
+    public void setClients(ServerThread[] clients) {
+        this.clients = clients;
     }
 
 

@@ -7,7 +7,7 @@ public class card {
     private int set;
 
     public card(int id) {
-        if ((id > 0) && (id < 53)) {
+        if ((id > 0) && (id < 53)){
             ID = id;
         } else {
             ID = 0;

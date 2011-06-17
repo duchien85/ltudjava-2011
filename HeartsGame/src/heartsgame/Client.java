@@ -111,8 +111,12 @@ public class Client implements Runnable {
         this.streamIn = streamIn;
     }
 
-    public String GetMessage() throws IOException {
+    public String GetMessage() {
         return message.lastElement();
+    }
+
+    public String GetPrvMessage(){
+        return message.get(message.size()-2);
     }
 /*
     public static void main(String args[]) {
