@@ -13,12 +13,14 @@ import javax.swing.*;
  */
 public class GameStateAbout extends GameState {
 
-    GameStateAbout() {
+    GameStateAbout(final GameControl gameControl, final GUI gui) {
         isEnter = false;
+        this.gameControl = gameControl;
+        this.gui = gui;
     }
 
   
-    public void Draw(final GameControl gameControl, final GUI gui) {
+    public void Draw() {
         if (isEnter == false) {
             isEnter = true;
             gui.container.removeAll();

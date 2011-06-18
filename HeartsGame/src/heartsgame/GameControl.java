@@ -32,10 +32,10 @@ public class GameControl implements Runnable {
         gui = new GUI(this);
         nState = 4;
         gameState = new GameState[nState];
-        gameState[GameDef.GAME_MENU] = new GameStateMenu();
-        gameState[GameDef.GAME_ABOUT] = new GameStateAbout();
-        gameState[GameDef.GAME_WAIT] = new GameStateWait();
-        gameState[GameDef.GAME_PLAY] = new GameStatePlay();
+        gameState[GameDef.GAME_MENU] = new GameStateMenu(this,gui);
+        gameState[GameDef.GAME_ABOUT] = new GameStateAbout(this,gui);
+        gameState[GameDef.GAME_WAIT] = new GameStateWait(this,gui);
+        //gameState[GameDef.GAME_PLAY] = new GameStatePlay(this,gui);
 
         currentState = GameDef.GAME_MENU;
 
@@ -50,12 +50,12 @@ public class GameControl implements Runnable {
 
     public void run() {
         while (true) {
-            gameState[currentState].Update(this, gui);
+            gameState[currentState].Update();
              try {
                 Thread.sleep(100);
             } catch (Exception e) {
             }
-            gameState[currentState].Draw(this, gui);
+            gameState[currentState].Draw();
              try {
                 Thread.sleep(100);
             } catch (Exception e) {
@@ -69,13 +69,15 @@ public class GameControl implements Runnable {
     }
 
     void IsClient() {
+        gameState[GameDef.GAME_PLAY] = new GameStatePlayClient(this,gui);
         setType(GameDef.IS_CLIENT);
-        setClient(new Client("localhost", 8999));
+        setClient(new Client("localhost", 8999,this));
     }
 
     void IsServer() {
+        gameState[GameDef.GAME_PLAY] = new GameStatePlayServer(this,gui);
         setType(GameDef.IS_SERVER);
-        setServer(new Server(8999));
+        setServer(new Server(8999,this));
     }
 
     /**
@@ -160,5 +162,16 @@ public class GameControl implements Runnable {
      */
     public void setViTri(int viTri) {
         this.viTri = viTri;
+    }
+
+
+    void HaveMessageFromServer(String msg){
+        System.out.println("Server send : " + msg);
+        gameState[currentState].HaveMessage(msg);
+    }
+
+    void HaveMessageFromClient(String msg){
+        System.out.println("Client send : " + msg);
+        gameState[currentState].HaveMessage(msg);
     }
 }

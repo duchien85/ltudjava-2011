@@ -11,12 +11,19 @@ package heartsgame;
  */
 public class GameState {
     public boolean isEnter;
+    GameControl gameControl;
+    GUI gui;
 
     public GameState(){
 
     }
+
+    public GameState(final GameControl gControl,final GUI g){
+        this.gameControl = gControl;
+        this.gui = g;
+    }
    
-    void Draw(final GameControl gameControl,final GUI gui) {
+    void Draw() {
         
     }
 
@@ -24,7 +31,11 @@ public class GameState {
         isEnter = false;
     }
 
-    void Update(final GameControl gameControl,final GUI gui) {
+    void Update() {
+
+    }
+
+    void HaveMessage(String msg) {
 
     }
 }

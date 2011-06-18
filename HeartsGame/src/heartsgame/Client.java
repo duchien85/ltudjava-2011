@@ -18,15 +18,13 @@ public class Client implements Runnable {
     private Thread thread = null;
     private DataInputStream streamIn = null;
     private DataOutputStream streamOut = null;
-    private Vector<String> message;
-    //private ClientThread client = null;
-
-    public Client(String serverName, int serverPort) {
+    GameControl gameControl ;
+    public Client(String serverName, int serverPort,final GameControl gControl) {
         System.out.println("Establishing connection. Please wait ...");
         try {
             socket = new Socket(serverName, serverPort);
             System.out.println("Connected: " + socket);
-            message = new Vector<String>();
+            gameControl = gControl;
             start();
         } catch (UnknownHostException uhe) {
             System.out.println("Host unknown: " + uhe.getMessage());
@@ -62,9 +60,10 @@ public class Client implements Runnable {
             System.out.println("Good bye. Press RETURN to exit ...");
             stop();
         } else {
-            if (msg!=null)
-                message.add(msg);
-            System.out.println(msg);
+            //if (msg!=null)
+            //    message.add(msg);
+            gameControl.HaveMessageFromServer(msg);
+            //System.out.println(msg);
         }
     }
 
@@ -111,13 +110,6 @@ public class Client implements Runnable {
         this.streamIn = streamIn;
     }
 
-    public String GetMessage() {
-        return message.lastElement();
-    }
-
-    public String GetPrvMessage(){
-        return message.get(message.size()-2);
-    }
 /*
     public static void main(String args[]) {
         Client client = null;

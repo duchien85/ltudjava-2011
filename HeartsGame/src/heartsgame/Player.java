@@ -1,21 +1,38 @@
 package heartsgame;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
+class CardComparator implements Comparator<card> {
+
+    public int compare(card card1, card card2) {
+        int id1 = card1.getID();
+        int id2 = card2.getID();
+
+        if(id1>id2)
+            return 1;
+        else if(id1==id2)
+            return 0;
+        else
+            return -1;
+    }
+}
 abstract public class Player {
 
     protected String name;
-    protected card[] handcard;
+    private List<card> handcard;
     protected Boolean[] playedcard;
     protected ArrayList<card> scorecard;
     // mang chua 3 la bai de hoan doi
-    public ArrayList<Integer> threeCard;
+    private ArrayList<Integer> threeCard;
     protected int score;
 
     public Player() {
         name = "";
         score = 0;
-        handcard = new card[14];
+        handcard = new ArrayList<card>();
         playedcard = new Boolean[14];
         scorecard = new ArrayList<card>();
         threeCard = new ArrayList<Integer>();
@@ -46,79 +63,42 @@ abstract public class Player {
     }
 
     public void receiveCard(card c) {
-        for (int i = 1; i <= 13; i++) {
-            if (handcard[i] == null) {
-                handcard[i] = c;
-                break;
-            }
-        }
+        getHandcard().add(c);
+        sort();
     }
 
+    /*
     public void receiveCard(int index, card c) {
         handcard[index] = c;
+        sortcard();
     }
-
+*/
     public card getHandCard(int index) {
-        if (index < 14) {
-            return handcard[index];
+        if (index < getHandcard().size()) {
+            return getHandcard().get(index);
         }
         return null;
     }
 
     public card pullACard(int index) {
-        card tam = handcard[index];
-        handcard[index] = null;
+        card tam = getHandcard().get(index);
+        getHandcard().remove(index);
+        sort();
         return tam;
-    }
-
-    public void sortcard() {
-        card[] handcard2 = new card[14];
-        card[] setcard = new card[14];
-        int tro1 = 0, tro2;
-        for (int currentRank = 1; currentRank <= 4; currentRank++) {
-            if (currentRank == 4) {
-                currentRank = 0;
-            }
-            tro2 = 0;
-            //lay set
-            for (int i = 1; i <= 13; i++) {
-                if (handcard[i].getRankOfSet() == currentRank) {
-                    tro2++;
-                    setcard[tro2] = handcard[i];
-                }
-            }
-            //sap xep set do
-            for (int i = 1; i < tro2; i++) {
-                for (int j = i; j <= tro2; j++) {
-                    if (setcard[j].getID() < setcard[i].getID()) {
-                        card cardtam = setcard[i];
-                        setcard[i] = setcard[j];
-                        setcard[j] = cardtam;
-                    }
-                }
-            }
-
-            //dua vao handcard2
-            for (int i = 1; i <= tro2; i++) {
-                tro1++;
-                handcard2[tro1] = setcard[i];
-            }
-            if (currentRank == 0) {
-                currentRank = 4;
-            }
-        }
-        handcard = handcard2;
     }
 
     public boolean isContainCard(int cardID) {
         for (int i = 1; i <= 13; i++) {
-            if (handcard[i].getID() == cardID) {
+            if (getHandcard().get(i).getID() == cardID) {
                 return true;
             }
         }
         return false;
     }
 
+    private void sort(){
+        Collections.sort(handcard,new CardComparator());
+    }
     public void add4scorecard(ArrayList<card> fourcard) {
         for (int i = 0; i <= 3; i++) {
             scorecard.add(fourcard.get(i));
@@ -133,8 +113,8 @@ abstract public class Player {
     }
 
     public void newRound() {
-        for (int i = 1; i <= 13; i++) {
-            handcard[i] = null;
+        getHandcard().clear();
+        for (int i = 1; i <= 13; i++) {         
             playedcard[i] = false;
         }
         scorecard.clear();
@@ -166,11 +146,39 @@ abstract public class Player {
 
     public card play2bich() {
         for (int i = 1; i <= 13; i++) {
-            if (handcard[i].getID() == 2) {
+            if (getHandcard().get(i).getID() == 2) {
                 playedcard[i] = true;
-                return handcard[i];
+                return getHandcard().get(i);
             }
         }
         return null;
+    }
+
+    /**
+     * @return the threeCard
+     */
+    public ArrayList<Integer> getThreeCard() {
+        return threeCard;
+    }
+
+    /**
+     * @param threeCard the threeCard to set
+     */
+    public void setThreeCard(ArrayList<Integer> threeCard) {
+        this.threeCard = threeCard;
+    }
+
+    /**
+     * @return
+     */
+    public ArrayList<card> getHandcard() {
+        return (ArrayList<card>) handcard;
+    }
+
+    /**
+     * @param handcard  to set
+     */
+    public void setHandcard(ArrayList<card> handcard) {
+        this.handcard = handcard;
     }
 }

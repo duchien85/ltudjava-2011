@@ -14,12 +14,14 @@ import javax.swing.JButton;
  */
 public class GameStateWait extends GameState {
 
-    GameStateWait() {
+    GameStateWait(final GameControl gameControl, final GUI gui) {
         isEnter = false;
+        this.gameControl= gameControl;
+        this.gui = gui;
     }
 
     @Override
-    public void Draw(final GameControl gameControl, final GUI gui) {
+    public void Draw() {
         if (isEnter == false) {
             gui.container.removeAll();
             isEnter = true;
@@ -41,7 +43,7 @@ public class GameStateWait extends GameState {
         }
     }
 
-    public void Update(final GameControl gameControl, final GUI gui) {
+    public void Update() {
         if (gameControl.getType() == GameDef.IS_SERVER) {
             if (gameControl.getServer().getClientCount() == 3) {
                 gameControl.setViTri(0);
@@ -52,17 +54,16 @@ public class GameStateWait extends GameState {
             }
 
         } else if (gameControl.getType() == GameDef.IS_CLIENT) {
-            try {
-                String msg = gameControl.getClient().GetMessage();
-                if (msg.startsWith("start")){
-                    int vitri = Integer.parseInt(msg.split("start")[1]);
-                    gameControl.setViTri(vitri);
-                    gameControl.SwitchState(GameDef.GAME_PLAY);
-                }
-            } catch (Exception ex) {
-                return;
-            }
-            ;
+            
+        }
+    }
+
+    @Override
+    public void HaveMessage(String msg){
+        if(gameControl.getType() == GameDef.IS_CLIENT && msg.startsWith("start")){
+            int vitri = Integer.parseInt(msg.split("start")[1]);
+            gameControl.setViTri(vitri);
+            gameControl.SwitchState(GameDef.GAME_PLAY);
         }
     }
 }

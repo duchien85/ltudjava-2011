@@ -13,12 +13,14 @@ import javax.swing.*;
  */
 public class GameStateMenu extends GameState {
 
-    GameStateMenu(){
+    GameStateMenu(final GameControl gameControl, final GUI gui){
         isEnter = false;
+        this.gameControl=gameControl;
+        this.gui = gui;
     }
 
     @Override
-    public void Draw(final GameControl gameControl, final GUI gui) {
+    public void Draw() {
         if (isEnter == false) {
             gui.container.removeAll();
             isEnter = true;
