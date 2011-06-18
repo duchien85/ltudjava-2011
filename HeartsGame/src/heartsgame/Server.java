@@ -7,6 +7,8 @@ package heartsgame;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *
@@ -18,18 +20,31 @@ public class Server implements Runnable{
     private ServerSocket server = null;
     private Thread thread = null;
     private int clientCount = 0;
-
-    public Server(int port) {
+    private Vector<String> message;
+    GameControl gameControl;
+     
+    public Server(int port, final GameControl gControl) {
         try {
             System.out.println("Binding to port " + port + ", please wait  ...");
             server = new ServerSocket(port);
             System.out.println("Server started: " + server);
+            gameControl = gControl;
             start();
         } catch (IOException ioe) {
             System.out.println("Can not bind to port " + port + ": " + ioe.getMessage());
         }
     }
 
+    public boolean IsExchanged(){
+        if (clientCount==3){
+           return (clients[0].getEndExchange()&&clients[1].getEndExchange()&&clients[2].getEndExchange()); 
+        }
+        return false;
+    }
+
+    public ArrayList<Integer> getCardExchange(int index){
+        return clients[index].getCardChange();
+    }
     public void run() {
         while (thread != null) {
             try {
@@ -111,9 +126,15 @@ public class Server implements Runnable{
             getClients()[findClient(ID)].send(".bye");
             remove(ID);
         } else {
-            for (int i = 0; i < getClientCount(); i++) {
+            gameControl.HaveMessageFromClient(input);
+            //boolean add = message.add(input);
+
+            /*
+             for (int i = 0; i < getClientCount(); i++) {
+                
                 getClients()[i].send(ID + ": " + input);
             }
+             */
         }
     }
 
@@ -166,13 +187,14 @@ public class Server implements Runnable{
     public void setClientCount(int clientCount) {
         this.clientCount = clientCount;
     }
-    
+
+    /*
     public static void main(String args[]) {
     Server server = null;
 
     server = new Server(8999);
     }
-
+*/
     /**
      * @return the clients
      */

@@ -20,6 +20,9 @@ public class card {
         return ID;
     }
 
+    public void setID(int id){
+        ID = id;
+    }
     public int getRankOfSet() {
         return rankofset;
     }

@@ -8,11 +8,8 @@ package heartsgame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
-import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
@@ -22,35 +19,25 @@ import javax.swing.border.EtchedBorder;
  * @author kydrenw
  */
 public class GameStatePlay extends GameState{
-    private JLabel[] score;
-    private JLabel[][] playercard;
-    private JLabel[] gamecard;
-    private JButton btnExchange;
-    private JLabel note;
-    private Player[] player;
-    private ArrayList<card> fourCard;
-    private ArrayList<Integer> threeCard;
-    private int cardClicked = -1;
-    private int currentTurn = -1;
-    private int playState = -1;
+    public JLabel[] score;
+    public JLabel[][] playercard;
+    public JLabel[] gamecard;
+    public JButton btnExchange;
+    public JLabel note;
+    public Player[] player;
+    public ArrayList<card> fourCard;
+    public int cardClicked = -1;
+    public int currentTurn = -1;
+    public int playState = -1;
+    public boolean change;
+    public boolean endExchange = false;
 
-    private int startReceiveCard = -1;
-    private boolean change;
-    
     GameStatePlay(){
-        isEnter = false;
 
-        player = new Human[4];
-        player[0] = new Human("Player1");
-        player[1] = new Human("Player2");
-        player[2] = new Human("Player3");
-        player[3] = new Human("Player4");
-
-        fourCard = new ArrayList<card>();
-        threeCard = new ArrayList<Integer>();
     }
+
     @Override
-    public void Draw(final GameControl gameControl, final GUI gui){
+    public void Draw(){
         if (isEnter == false) {
             gui.container.removeAll();
             isEnter = true;
@@ -58,7 +45,14 @@ public class GameStatePlay extends GameState{
             // button Enchange
             btnExchange = new JButton("Exchange");
             btnExchange.setBounds(350, 330, 100, 20);
-            btnExchange.setEnabled(false);
+            btnExchange.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    GameStatePlay.this.btnExchange.setText("Wait for other player...");
+                    GameStatePlay.this.btnExchange.setBounds(310, 330, 160, 20);
+                    GameStatePlay.this.btnExchange.setEnabled(false);
+                    GameStatePlay.this.AceptExchange();
+                }
+            });
             gui.add(btnExchange);
 
             // hien diem so
@@ -88,165 +82,110 @@ public class GameStatePlay extends GameState{
         else
         {
             if (playState == GameDef.GAME_PLAY_START){
-                drawAllCard(gui);
+                drawAllCard();
             }else if (playState == GameDef.GAME_PLAY_EXCHANGE){
                 if (change ==true){
-                   drawAllCard(gui);
+                   drawAllCard();
+                   change = false;
+                }                
+            }else if (playState == GameDef.GAME_PLAY_PLAYING){
+                btnExchange.setText("Playing...");
+                if (change ==true){
+                   drawAllCard();
                    change = false;
                 }
-
-                
-            }else if (playState == GameDef.GAME_PLAY_PLAYING){
-                drawAllCard(gui);
             }else if (playState == GameDef.GAME_PLAY_END){
-                drawAllCard(gui);
+                if (change ==true){
+                   drawAllCard();
+                   change = false;
+                }
             }                       
         }
 
     }
 
     @Override
-    void Update(final GameControl gameControl,final GUI gui) {
-        if (gameControl.getType() == GameDef.IS_SERVER){
-            UpdateServer(gameControl,gui);
-        }
-        else if (gameControl.getType() == GameDef.IS_CLIENT){
-            UpdateClient(gameControl,gui);
-        }
+    public void Update() {
+
     }
 
     @Override
-    void Enter(){
+    public void Enter(){
         isEnter = false;
         currentTurn = 0;
         playState = GameDef.GAME_PLAY_START;
         change =false;
     }
 
-    void UpdateServer(final GameControl gameControl,final GUI gui){
-        if(playState == GameDef.GAME_PLAY_START){
-            System.out.println("In Game START !!! ");
-            divideCard(gameControl, gui);
-            change = true;
-            SendDataToClient(gameControl);
-            System.out.println("Switch to Game Exchange !!! ");
-            playState = GameDef.GAME_PLAY_EXCHANGE;
-        }else if(playState == GameDef.GAME_PLAY_EXCHANGE){
-            //System.out.println("In Game Exchange !!! ");
-            if (change == true){
-                SendDataToClient(gameControl);
-            }
 
-            ReceiveExchange(gui);
-            
-        }else if(playState == GameDef.GAME_PLAY_PLAYING){
-            //System.out.println("In Game PLAYING !!! ");
-            
-        }else if(playState == GameDef.GAME_PLAY_END){
-            //System.out.println("In Game END !!! ");
-
-        }
-    }
-
-    void ReceiveExchange(final GUI gui){
-
+    // cho chon 3 la bai de trao doi
+    protected void ReceiveExchange(){
         if (cardClicked != -1) { // click vao 1 la bai
-            System.out.println(cardClicked);
-            if (threeCard.contains(cardClicked)) {
-                for (int i = 0; i < threeCard.size(); i++) {
-                    if (threeCard.get(i) == cardClicked) {
-                        threeCard.remove(i);
+            System.out.println("Click to card " + cardClicked);
+            if (player[0].getThreeCard().contains(cardClicked)) {
+                for (int i = 0; i < player[0].getThreeCard().size(); i++) {
+                    if (player[0].getThreeCard().get(i) == cardClicked) {
+                        player[0].getThreeCard().remove(i);
                         break;
                     }
                 }
                 setnormal(cardClicked);
-            } else if (threeCard.size() != 3) {
-                threeCard.add(cardClicked);
+            } else if (player[0].getThreeCard().size() != 3) {
+                player[0].getThreeCard().add(cardClicked);
                 sethightlight(cardClicked);
             }
             cardClicked = -1;
-            System.out.println(cardClicked);
+            //System.out.println(cardClicked);
             //drawAllCard(gui);
         }
 
-        if (threeCard.size()==3){
+        if ( player[0].getThreeCard().size()==3){
                 enableExchange();
             }else{
                 disableExchange();
         }
     }
-    void SendDataToClient(final GameControl gameControl){
-        // gui du lieu cho cac client
-            String data = "";
-            for (int i =0; i<4;i++){
-                data +="card";
-                for (int j=1;j<=14;j++){
-                    if (this.player[i].getHandCard(j) != null) {
-                        data += "c";
-                        data += this.player[i].getHandCard(j).getID();
-                    }
-                }
+    
+    protected void ChangeCard(String mess){
+        // reset lai cac quan bai
+        for (int n = 0; n < 4; n++) {
+            player[n].newRound();
+        }
+
+        // doc du lieu tu goi tin nhan duoc
+        String[] pcard = mess.split("card");
+        String[][] mycard = new String[4][];
+        for (int i = 1; i < pcard.length; i++) {
+            mycard[i - 1] = pcard[i].split("c");
+        }
+
+        // cap nhat cac quan bai cho 4 nguoi choi
+        int d = 0;
+        for (int j = 0; j < player.length; j++) {
+            int thutu = (gameControl.getViTri() + d) % 4;
+            for (int m = 1; m < mycard[thutu].length; m++) {
+                int id = Integer.parseInt(mycard[thutu][m]);
+                card c = new card(id);
+                player[j].receiveCard(c);
+                drawAllCard();
             }
-            gameControl.getServer().SendToAllClient(data);
-    }
-    void UpdateClient(final GameControl gameControl,final GUI gui){
-        if(playState == GameDef.GAME_PLAY_START){
-            String mess = gameControl.getClient().GetMessage();
-            if (mess.startsWith("card")) {
-                // reset lai cac quan bai
-                for (int n = 0; n < 4; n++) {
-                    player[n].newRound();
-                }
-
-                // doc du lieu tu goi tin nhan duoc
-                String[] pcard = mess.split("card");
-                String[][] mycard = new String[4][];
-                for (int i = 1; i < pcard.length; i++) {
-                    mycard[i - 1] = pcard[i].split("c");
-                }
-
-                // cap nhat cac quan bai cho 4 nguoi choi
-                int d = 0;
-                for (int j = 0; j < player.length; j++) {
-                    int thutu = (gameControl.getViTri() + d) % 4;
-                    for (int m = 1; m < mycard[thutu].length; m++) {
-                        int id = Integer.parseInt(mycard[thutu][m]);
-                        card c = new card(id);
-                        player[j].receiveCard(c);
-                        drawAllCard(gui);
-                    }
-                    d++;
-                }
-                // ve cac quan bai ra
-                //drawAllCard(gui);
-                change = true;
-                System.out.println("Switch to Game Exchange !!! ");
-                playState = GameDef.GAME_PLAY_EXCHANGE;
-            }
-        }else if(playState == GameDef.GAME_PLAY_EXCHANGE){
-            //System.out.println("In Game Exchange !!! ");
-            ReceiveExchange(gui);
-        }else if(playState == GameDef.GAME_PLAY_PLAYING){
-            //System.out.println("In Game PLAYING !!! ");
-
-        }else if(playState == GameDef.GAME_PLAY_END){
-            //System.out.println("In Game END !!! ");
-
+            d++;
         }
     }
-    public void note(String st){
+
+    protected void note(String st){
         note.setText(st);
     }
 
-    public void enableExchange(){
+    protected void enableExchange(){
         btnExchange.setEnabled(true);
     }
 
-    public void disableExchange(){
+    protected void disableExchange(){
         btnExchange.setEnabled(false);
     }
 
-    public void updateScore(){
+    protected void updateScore(){
         for(int i=0; i<4;i++){
              score[i].setText("Score: " + String.valueOf(player[i].getScore()));
         }
@@ -304,7 +243,7 @@ public class GameStatePlay extends GameState{
         return kq;
     }
 
-    private void drawCards(final GUI gui,JLabel jls[], int position){
+    private void drawCards(JLabel jls[], int position){
         final int khoangcach = 20;
         int x;
         int y;
@@ -362,57 +301,25 @@ public class GameStatePlay extends GameState{
         gui.repaint();
     }
 
-    private void clear4play(final GUI gui){
+    protected void clear4play(){
         while(gui.getComponentCount()>2){
             gui.remove(2);
         }
     }
 
-    private void drawAllCard(final GUI gui){
-        clear4play(gui);
+    public void drawAllCard(){
+        clear4play();
         playercard = new JLabel[4][];
         playercard[0] = loadCard(player[0],true);
-        drawCards(gui,playercard[0],1);
+        drawCards(playercard[0],1);
         for (int i=1; i<4; i++){
             playercard[i] = loadCard(player[i],false);
-            drawCards(gui,playercard[i],i+1);
+            drawCards(playercard[i],i+1);
         }
         gamecard = loadCard(fourCard);
-        drawCards(gui,gamecard,5);
+        drawCards(gamecard,5);
         updateScore();
-    }
-
-    // chia bai
-    public void divideCard(final GameControl gameControl,final GUI gui) {
-        // khoi tao mang cac quan bai gia tri ban dau la 0
-        int[] ddau = new int[53];
-        for (int i = 1; i < 53; i++) {
-            ddau[i] = 0;
-        }
-        // tao ngau nhien mang tu 1-53
-        SecureRandom numGenerate = new SecureRandom();
-        int tam = numGenerate.nextInt(53);
-        for (int i = 1; i < 53; i++) {
-            while ((tam == 0) || (ddau[tam] == 1)) {
-                tam = numGenerate.nextInt(53);
-            }
-            // danh dau la da co
-            ddau[tam] = 1;
-
-            // chia bai cho  nguoi choi
-            card c = new card(tam);
-            int p = (i - 1) % 4;
-            try {
-                player[p].receiveCard(c);
-            } catch (Exception e) {
-            }
-            drawAllCard(gui);
-            try {
-                gameControl.getThread().sleep(10);
-            } catch (Exception e) {
-            }
-        } 
-    }
+    }  
 
     private void setnormal(int cardClicked) {
         playercard[0][cardClicked].setEnabled(true);
@@ -421,4 +328,22 @@ public class GameStatePlay extends GameState{
     private void sethightlight(int cardClicked) {
         playercard[0][cardClicked].setEnabled(false);
     }
+
+    private void AceptExchange() {
+        endExchange = true;
+        
+        if (gameControl.getType()==GameDef.IS_SERVER){
+
+        }else if(gameControl.getType()==GameDef.IS_CLIENT){
+            String data ="exchange";
+            for(int i=0; i<3;i++){
+                data +="c";
+                data +=player[0].getThreeCard().get(i);
+            }
+            gameControl.getClient().SendToServer(data);
+        }
+    }
+    
+    // Server Methor
+    
 }
