@@ -10,9 +10,8 @@ package heartsgame;
  * @author kydrenw
  */
 public class GameState {
-    public boolean isEnter;
-    GameControl gameControl;
-    GUI gui;
+    protected GameControl gameControl;
+    protected GUI gui;
 
     public GameState(){
 
@@ -22,13 +21,10 @@ public class GameState {
         this.gameControl = gControl;
         this.gui = g;
     }
-   
-    void Draw() {
-        
-    }
+
 
     void Enter() {
-        isEnter = false;
+        
     }
 
     void Update() {

@@ -18,7 +18,7 @@ public class Client implements Runnable {
     private Thread thread = null;
     private DataInputStream streamIn = null;
     private DataOutputStream streamOut = null;
-    GameControl gameControl ;
+    private GameControl gameControl ;
     public Client(String serverName, int serverPort,final GameControl gControl) {
         System.out.println("Establishing connection. Please wait ...");
         try {
