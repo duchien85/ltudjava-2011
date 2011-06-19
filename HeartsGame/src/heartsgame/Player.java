@@ -8,15 +8,19 @@ import java.util.List;
 class CardComparator implements Comparator<card> {
 
     public int compare(card card1, card card2) {
-        int id1 = card1.getID();
-        int id2 = card2.getID();
-
-        if(id1>id2)
+        if (card1.getRankOfSet() > card2.getRankOfSet()) {
             return 1;
-        else if(id1==id2)
-            return 0;
-        else
+        } else if (card1.getRankOfSet() < card2.getRankOfSet()) {
             return -1;
+        } else {
+            if (card1.getID() > card2.getID()) {
+                return 1;
+            } else if (card1.getID() < card2.getID()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        }
     }
 }
 abstract public class Player {
@@ -33,7 +37,7 @@ abstract public class Player {
         name = "";
         score = 0;
         handcard = new ArrayList<card>();
-        playedcard = new Boolean[14];
+        playedcard = new Boolean[13];
         scorecard = new ArrayList<card>();
         threeCard = new ArrayList<Integer>();
     }
@@ -63,8 +67,11 @@ abstract public class Player {
     }
 
     public void receiveCard(card c) {
-        getHandcard().add(c);
-        sort();
+        if(c!=null)
+        {
+            getHandcard().add(c);
+            sort();
+        }
     }
 
     /*
@@ -74,21 +81,29 @@ abstract public class Player {
     }
 */
     public card getHandCard(int index) {
-        if (index < getHandcard().size()) {
-            return getHandcard().get(index);
+        try {
+            if (index < handcard.size()) {
+                return handcard.get(index);
+            }
+        }
+        catch(Exception ex){
+            System.out.println(ex.toString());
         }
         return null;
     }
 
     public card pullACard(int index) {
-        card tam = getHandcard().get(index);
-        getHandcard().remove(index);
-        sort();
-        return tam;
+        if (index < getHandcard().size()){
+            card tam = getHandcard().get(index);
+            getHandcard().remove(index);
+            sort();
+            return tam;
+        }
+        return null;
     }
 
     public boolean isContainCard(int cardID) {
-        for (int i = 1; i <= 13; i++) {
+        for (int i = 0; i < getHandcard().size(); i++) {
             if (getHandcard().get(i).getID() == cardID) {
                 return true;
             }
@@ -96,6 +111,10 @@ abstract public class Player {
         return false;
     }
 
+    public boolean playCardContain(int cardID){
+
+        return false;
+    }
     private void sort(){
         Collections.sort(handcard,new CardComparator());
     }
@@ -114,7 +133,7 @@ abstract public class Player {
 
     public void newRound() {
         getHandcard().clear();
-        for (int i = 1; i <= 13; i++) {         
+        for (int i = 0; i < 13; i++) {
             playedcard[i] = false;
         }
         scorecard.clear();
@@ -145,7 +164,7 @@ abstract public class Player {
     }
 
     public card play2bich() {
-        for (int i = 1; i <= 13; i++) {
+        for (int i = 0; i < handcard.size(); i++) {
             if (getHandcard().get(i).getID() == 2) {
                 playedcard[i] = true;
                 return getHandcard().get(i);
@@ -180,5 +199,27 @@ abstract public class Player {
      */
     public void setHandcard(ArrayList<card> handcard) {
         this.handcard = handcard;
+    }
+
+    public card playACard(int index) {
+        if (index < handcard.size()){
+            playedcard[index] = true;
+            card c = getHandcard().get(index);
+            handcard.remove(index);
+            sort();
+            return c;
+        }
+        return null;
+    }
+
+    boolean checkAvableRank(card c) {
+        for (int i=0;i<handcard.size();i++){
+            if (playedcard[i]==false){
+                if(c.checkSameRank(handcard.get(i))){
+                   return true;
+                }
+            }
+	}
+        return false;
     }
 }

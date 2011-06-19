@@ -126,15 +126,7 @@ public class Server implements Runnable{
             getClients()[findClient(ID)].send(".bye");
             remove(ID);
         } else {
-            gameControl.HaveMessageFromClient(input);
-            //boolean add = message.add(input);
-
-            /*
-             for (int i = 0; i < getClientCount(); i++) {
-                
-                getClients()[i].send(ID + ": " + input);
-            }
-             */
+            gameControl.HaveMessageFromClient(input);          
         }
     }
 

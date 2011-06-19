@@ -14,35 +14,12 @@ import javax.swing.JButton;
  */
 public class GameStateWait extends GameState {
 
-    GameStateWait(final GameControl gameControl, final GUI gui) {
-        isEnter = false;
+    public GameStateWait(final GameControl gameControl, final GUI gui) {
         this.gameControl= gameControl;
         this.gui = gui;
     }
 
     @Override
-    public void Draw() {
-        if (isEnter == false) {
-            gui.container.removeAll();
-            isEnter = true;
-
-            // them button New Game
-            JButton btnWait = new JButton("Waiting ... ");
-            btnWait.setBounds(330, 200, 150, 20);
-            btnWait.setEnabled(false);
-            btnWait.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    //gameControl.SwitchState(GameDef.GAME_WAIT);
-                }
-            });
-            gui.container.add(btnWait);
-
-
-            gui.repaint();
-        }
-    }
-
     public void Update() {
         if (gameControl.getType() == GameDef.IS_SERVER) {
             if (gameControl.getServer().getClientCount() == 3) {
@@ -58,6 +35,23 @@ public class GameStateWait extends GameState {
         }
     }
 
+    @Override
+    public void Enter(){
+        gui.container.removeAll();
+
+        // them button New Game
+        JButton btnWait = new JButton("Waiting ... ");
+        btnWait.setBounds(330, 200, 150, 20);
+        btnWait.setEnabled(false);
+        btnWait.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                //gameControl.SwitchState(GameDef.GAME_WAIT);
+            }
+        });
+        gui.container.add(btnWait);
+        gui.repaint();
+    }
     @Override
     public void HaveMessage(String msg){
         if(gameControl.getType() == GameDef.IS_CLIENT && msg.startsWith("start")){
