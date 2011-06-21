@@ -1,0 +1,9 @@
+1. chinh sua ket noi : ket noi mang LAN : nhap IP : Nhan
+2. design giao dien : Hoang
+3. viet file Ant dong goi : Ninh
+4. viet bao cao : 
+5. bo sung chuc nang choi voi may : Ninh
+6. refactor cau truc : 3
+7. toi uu hien thi : Hoang
+8. thuat toan trao bai : Nhan
+9. choi bai va kiem tra thang thua, van moi : Hoang
