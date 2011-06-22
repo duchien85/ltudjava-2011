@@ -60,6 +60,7 @@ public class GameStatePlayServer extends GameStatePlay {
                 ReceiveCardPlay();
                 cardClicked = -1;
             }
+            checkEnd4Card();
         }
 
         else if(playState == GameDef.GAME_PLAY_END){
@@ -73,11 +74,6 @@ public class GameStatePlayServer extends GameStatePlay {
             ArrayList<Integer> card1 = gameControl.getServer().getCardExchange(0);
             ArrayList<Integer> card2 = gameControl.getServer().getCardExchange(1);
             ArrayList<Integer> card3 = gameControl.getServer().getCardExchange(2);      
-
-            for(int i=0; i<4;i++){
-                player[i].getThreeCard().clear();
-                player[i].setBeginCard(player[i].getListCard());
-            }
 
             SendDataCardToClient();
             btnCommand.setText("play card");
@@ -122,6 +118,7 @@ public class GameStatePlayServer extends GameStatePlay {
         for(int i=0; i<4;i++){
             player[i].sort();
         }
+        drawAllCard();
         System.out.println("Finished dicide card !!! ");
     }
 
@@ -135,16 +132,19 @@ public class GameStatePlayServer extends GameStatePlay {
         else if (playState == GameDef.GAME_PLAY_PLAYING){
             if(msg.startsWith("play")){ // tin hieu cac la bai cua nguoi choi
                 int vitri = Integer.parseInt(msg.split("play")[1]);
-                String card = msg.split("play")[2];
-                String [] idcard = card.split("c");
+                if (msg.split("play").length > 2) {
+                    String card = msg.split("play")[2];
+                    String[] idcard = card.split("c");
 
-                player[vitri].newRound();
-                for (int i =1 ;i<idcard.length;i++){
-                    int c = Integer.parseInt(idcard[i]);
-                    player[vitri].receiveCard(c);
+                    //player[vitri].newRound();
+                    player[vitri].getListCard().clear();
+                    for (int i = 1; i < idcard.length; i++) {
+                        int c = Integer.parseInt(idcard[i]);
+                        player[vitri].receiveCard(c);
+                    }
                 }
-                drawAllCard();
-                // doi nhan tin hieu 4 la bai danh ra
+                else
+                   player[vitri].getListCard().clear();
             }
 
             else if (msg.startsWith("four")){// tin hieu 4 la bai danh ra
@@ -158,11 +158,46 @@ public class GameStatePlayServer extends GameStatePlay {
                             fourCard.add(c);
                         }
                     }
+                    nextturn();
                     SendDataCardToClient();
-                    drawAllCard();
-                    nextturn(); // qua luot cho nguoi ke tiep
-                }
+                    drawAllCard();                    
+                }            
             }
         }
     }
+
+    private void checkEnd4Card() {        
+        if (fourCard.size() == 4) {
+            System.out.println("Checking end 4 card ...");
+            int winCard = check4cardwin();
+            for (int i=0; i< 4; i++){
+                if(fourCard.get(i)==winCard){                    
+                    firstturn = (firstturn+i)%4;
+                    player[firstturn].add4scorecard(fourCard);
+                    updateScore();
+                    
+                    String score = "";
+                    for(int index=0; index<4;index++){
+                        score+="score" + player[index].getScore();
+                    }
+                    gameControl.getServer().SendToAllClient(score);
+
+                    currentTurn = firstturn;
+                    if (firstturn==0)
+                        this.notice("Wait for you play ...");
+                    else
+                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
+                    break;
+                }
+            }
+            roundcount++;
+            fourCard.clear();
+            gameControl.getServer().SendToAllClient("turn"+firstturn);
+            drawAllCard();
+            if (roundcount == 13) {
+                processEndRound();
+                gameControl.getServer().SendToAllClient("endround");
+            }
+        }
+    }    
 }

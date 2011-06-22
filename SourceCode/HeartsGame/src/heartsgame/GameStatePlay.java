@@ -4,7 +4,6 @@
  */
 package heartsgame;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
@@ -121,19 +120,16 @@ public class GameStatePlay extends GameState {
         } else {
             disableButton();
         }
-    }
+    } 
 
     protected void nextturn() {
         currentTurn = (currentTurn + 1) % 4;
-        if (fourCard.size() == 4) {
-                checkEnd4Card();
-        }
 
         System.out.println("Next turn : Wait for player " + (currentTurn + 1) + " play ....");
         if (currentTurn != 0)
-            this.notice("Wait for player " + (currentTurn + 1) + " play ....");
+            this.notice("First : " + (firstturn+1) + " ; Wait for player " + (currentTurn + 1) + " play ....");
         else
-            this.notice("Wait to you play ...");
+            this.notice("First : " + (firstturn+1) + " ; Wait to you play ...");
 
     }
 
@@ -147,8 +143,8 @@ public class GameStatePlay extends GameState {
                     have2chuon = false;
 
                     if (gameControl.getType() == GameDef.IS_SERVER) {
-                        SendDataCardToClient();
                         nextturn();
+                        SendDataCardToClient();                        
                     } else
                         SendDataCardToServer();
                     
@@ -160,18 +156,18 @@ public class GameStatePlay extends GameState {
                     this.notice("Ban phai di 2 chuon dau tien !!!");
                 }
             } else if (fourCard.isEmpty()) { // server di truoc
-                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
+                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==0)) {
                     this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
                 } else {
-                    if (cardClicked == GameDef.ISQBICH && (roundcount == 1)) {
+                    if (cardClicked == GameDef.ISQBICH && (roundcount == 0)) {
                         this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di dau tien");
                     } else {
                         fourCard.add(player[0].playACard(cardClicked));
                         drawAllCard();
 
                         if (gameControl.getType() == GameDef.IS_SERVER) {
-                            SendDataCardToClient();
                             nextturn();
+                            SendDataCardToClient();
                         } else {
                             SendDataCardToServer();
                         }
@@ -194,8 +190,8 @@ public class GameStatePlay extends GameState {
                     drawAllCard();
                     
                     if (gameControl.getType() == GameDef.IS_SERVER) {
-                        SendDataCardToClient();
                         nextturn();
+                        SendDataCardToClient();
                     } else
                         SendDataCardToServer();                    
 
@@ -226,10 +222,11 @@ public class GameStatePlay extends GameState {
         int d = 0;
         for (int j = 0; j < player.length; j++) {
             int thutu = (gameControl.getViTri() + d) % 4;
-            for (int m = 1; m < mycard[thutu].length; m++) {
-                int id = Integer.parseInt(mycard[thutu][m]);
-                player[j].receiveCard(id);
-                
+            if (mycard[thutu] != null) {
+                for (int m = 1; m < mycard[thutu].length; m++) {
+                    int id = Integer.parseInt(mycard[thutu][m]);
+                    player[j].receiveCard(id);
+                }
             }
             d++;
         }
@@ -249,6 +246,7 @@ public class GameStatePlay extends GameState {
     }
 
     protected void updateScore() {
+        System.out.println("Updating score...");
         for (int i = 0; i < 4; i++) {
             score[i].setText("Score: " + String.valueOf(player[i].getScore()));
         }
@@ -401,7 +399,6 @@ public class GameStatePlay extends GameState {
             DrawUpdateCard(i);
         }
 	gui.repaint();
-        updateScore();
     }
 
     protected void setnormal(int cardClicked) {
@@ -436,7 +433,7 @@ public class GameStatePlay extends GameState {
 
     protected void FindFirstPlay() {
         for (int i = 0; i < 4; i++) {
-            if (player[i].isContainCard(2)) {
+            if (player[i].isContainCard(GameDef.IS2CHUON)) {
                 firstturn = i;
                 currentTurn = firstturn;
                 break;
@@ -452,40 +449,7 @@ public class GameStatePlay extends GameState {
         if (firstturn==0)
             this.notice("You play first !");
         else
-            this.notice("Player " + (firstturn + 1) + " play first !!!");
-    }
-
-    protected void checkEnd4Card() {
-        if (fourCard.size() == 4) {
-            int winCard = check4cardwin();
-            for (int i = 0; i < 4; i++) {
-                if (player[i].isContainCard(winCard)) {
-                    player[i].add4scorecard(fourCard);
-                    firstturn = i;
-                    currentTurn = firstturn;
-
-                    if (firstturn==0)
-                        this.notice("Wait for you play ...");
-                    else
-                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
-
-
-                    break;
-                }
-            }
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-            }
-            roundcount++;
-            fourCard.clear();
-            drawAllCard();
-
-            //gui.Paint(5);
-            if (roundcount == 13) {
-                processEndRound();
-            }
-        }
+            this.notice("Player " + (firstturn + 1) + " play first !!!");        
     }
 
     protected void processEndRound() {
@@ -496,8 +460,7 @@ public class GameStatePlay extends GameState {
                 + "  Player 3 : " + player[2].getScore() + "  Player 4 :  " + player[3].getScore());
 
         if (check100score() == false) {
-            showbutton("New Round");
-            //drawAllCard();
+            showbutton("New Round");            
         } else {
             showbutton("New Game");
             if (getMinScore() == 0) {
@@ -510,6 +473,7 @@ public class GameStatePlay extends GameState {
                 player[i].resetScore();
             }
         }
+        drawAllCard();
     }
 
     protected boolean check100score() {
@@ -570,6 +534,7 @@ public class GameStatePlay extends GameState {
 
     // gui du lieu toi client
     protected void SendDataCardToClient() {
+        System.out.println("Sending data to client...");
         // gui du lieu cho cac client
         String data = "";
         for (int i = 0; i < 4; i++) {
@@ -590,6 +555,7 @@ public class GameStatePlay extends GameState {
     }
 
     private void SendDataCardToServer(){
+        System.out.println("Sending data to server...");
         String cardData = "play" + gameControl.getViTri() + "play";
         for (int i=0; i<player[0].getListCard().size();i++){
             cardData += "c";

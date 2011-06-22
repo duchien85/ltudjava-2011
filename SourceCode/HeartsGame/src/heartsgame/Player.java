@@ -34,8 +34,7 @@ public class Player {
 
     // name cua nguoi choi
     protected String name;
-    // danh sach cac quan bai sau khi trao bai
-    private List<Integer> beginCard;
+
     // danh sach cac quan bai hien co
     // luu id cua quan bai
     private List<Integer> dsBai;
@@ -63,7 +62,6 @@ public class Player {
     private void Init(){
         name = "";
         score = 0;
-        beginCard = new ArrayList<Integer>();
         dsBai = new ArrayList<Integer>();
         scorecard = new ArrayList<Integer>();
         threeCard = new ArrayList<Integer>();
@@ -124,18 +122,7 @@ public class Player {
         }
         return -1;
     }
-/*
- *
- */
 
-    public boolean isContainCard(int cardID) {
-        for (int i = 0; i < beginCard.size(); i++) {
-            if (beginCard.get(i) == cardID) {
-                return true;
-            }
-        }
-        return false;
-    }
     public void sort(){
         Collections.sort(dsBai,new CardComparator());
     }
@@ -153,7 +140,6 @@ public class Player {
     }
 
     public void newRound() {
-        beginCard.clear();
         getListCard().clear();
         scorecard.clear();
     }
@@ -233,7 +219,11 @@ public class Player {
         return false;
     }
 
-    public void setBeginCard(ArrayList<Integer> listCard){
-        this.beginCard.addAll(listCard);
+    boolean isContainCard(int id) {
+        for (int i=0; i< getListCard().size(); i++){
+            if (getIDCardAt(i)==id)
+                return true;
+        }
+        return false ;
     }
 }
