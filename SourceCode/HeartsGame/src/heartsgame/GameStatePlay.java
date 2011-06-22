@@ -129,7 +129,7 @@ public class GameStatePlay extends GameState {
                 checkEnd4Card();
         }
 
-        System.out.println("Wait for player " + (currentTurn + 1) + " play ....");
+        System.out.println("Next turn : Wait for player " + (currentTurn + 1) + " play ....");
         if (currentTurn != 0)
             this.notice("Wait for player " + (currentTurn + 1) + " play ....");
         else
@@ -160,7 +160,7 @@ public class GameStatePlay extends GameState {
                     this.notice("Ban phai di 2 chuon dau tien !!!");
                 }
             } else if (fourCard.isEmpty()) { // server di truoc
-                if ((card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
+                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
                     this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
                 } else {
                     if (cardClicked == GameDef.ISQBICH && (roundcount == 1)) {
@@ -184,11 +184,11 @@ public class GameStatePlay extends GameState {
                 }
             } else if (fourCard.size() > 0) {// server di sau
                 
-                if (card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
+                if (Card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
 
                     fourCard.add(player[0].playACard(cardClicked));
 
-                    if (card.getType(cardClicked) == GameDef.CHAT_CO) {
+                    if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
                         duocChonCo = true;
                     }
                     drawAllCard();
@@ -463,6 +463,13 @@ public class GameStatePlay extends GameState {
                     player[i].add4scorecard(fourCard);
                     firstturn = i;
                     currentTurn = firstturn;
+
+                    if (firstturn==0)
+                        this.notice("Wait for you play ...");
+                    else
+                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
+
+
                     break;
                 }
             }
@@ -552,14 +559,13 @@ public class GameStatePlay extends GameState {
 
     // tra ve id cua quan bai thang trong 4 quan bai danh ra
     protected int check4cardwin() {
-        card max = new card(fourCard.get(0));
-        for (int i = 0; i < fourCard.size(); i++) {
-            card c = new card(fourCard.get(i));
-            if (c.greaterThan(max)) {
-                max = new card(fourCard.get(i));
+        int max = fourCard.get(0);
+        for (int i = 1; i < fourCard.size(); i++) {
+            if (Card.fisrtThan(fourCard.get(i),max)) {
+                max = fourCard.get(i);
             }
         }
-        return max.getID();
+        return max;
     }
 
     // gui du lieu toi client
