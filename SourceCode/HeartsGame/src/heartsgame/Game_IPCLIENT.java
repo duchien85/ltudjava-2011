@@ -89,7 +89,7 @@ public class Game_IPCLIENT extends GameState {
         );
 
        gui.container.add(jop);
-        gui.container.add(btnConnect);
-        gui.repaint();
+       gui.container.add(btnConnect);
+       gui.repaint();
     }
 }
