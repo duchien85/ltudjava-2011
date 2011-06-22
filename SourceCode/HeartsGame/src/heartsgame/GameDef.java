@@ -20,6 +20,11 @@ public class GameDef {
     static int GAME_PLAY_PLAYING = 6;
     static int GAME_PLAY_END = 7;         // ket thuc game
 
+    static int GAME_IPCLIENT = 8;
+
+    static int GAME_IPSERVER = 9;
+
+
     static int IS_SERVER = 0;
     static int IS_CLIENT = 1;
 

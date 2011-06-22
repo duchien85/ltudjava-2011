@@ -28,8 +28,7 @@ public class GameStateMenu extends GameState {
         btnNewGame.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                gameControl.IsServer();
-                gameControl.SwitchState(GameDef.GAME_WAIT);
+                 gameControl.SwitchState(GameDef.GAME_IPSERVER);
             }
         });
         gui.container.add(btnNewGame);
@@ -40,8 +39,7 @@ public class GameStateMenu extends GameState {
         btnConnect.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                gameControl.SwitchState(GameDef.GAME_WAIT);
-                gameControl.IsClient();
+                gameControl.SwitchState(GameDef.GAME_IPCLIENT);
             }
         });
         gui.container.add(btnConnect);

@@ -1,12 +1,12 @@
 package heartsgame;
 
-public class Card {
+public class card {
 
     private int ID; // chi so cua quan bai 1 - 52
     private int type;
     private int rank;
 
-    public Card(int id) {
+    public card(int id) {
         if ((id > 0) && (id < 53)){
             ID = id;
         } else {
@@ -31,11 +31,11 @@ public class Card {
 
     // kiem tra co cung type voi nhau khong
     public boolean cungChat(int idCard) {
-        return (Card.getType(idCard) == this.getType());
+        return (card.getType(idCard) == this.getType());
     }
 
     // kiem tra gia tri quan bai co lon hon khong
-    public boolean greaterThan(Card othercaCard) {
+    public boolean greaterThan(card othercaCard) {
         return ((getRank() > othercaCard.getRank()) && (getType() == othercaCard.getType()));
     }
 
