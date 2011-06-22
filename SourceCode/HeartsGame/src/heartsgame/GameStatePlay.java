@@ -127,9 +127,9 @@ public class GameStatePlay extends GameState {
 
         System.out.println("Next turn : Wait for player " + (currentTurn + 1) + " play ....");
         if (currentTurn != 0)
-            this.notice("First : " + (firstturn+1) + " ; Wait for player " + (currentTurn + 1) + " play ....");
+            this.notice("Wait for player " + (currentTurn + 1) + " play ....");
         else
-            this.notice("First : " + (firstturn+1) + " ; Wait to you play ...");
+            this.notice("Wait to you play ...");
 
     }
 
