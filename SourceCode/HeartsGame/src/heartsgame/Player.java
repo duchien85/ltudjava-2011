@@ -142,7 +142,7 @@ public class Player {
     public void add4scorecard(ArrayList<Integer> fourcard) {
         for (int i = 0; i <= 3; i++) {
             scorecard.add(fourcard.get(i));
-            if (Card.getType(fourcard.get(i)) == GameDef.CHAT_CO) {
+            if (card.getType(fourcard.get(i)) == GameDef.CHAT_CO) {
                 addScore(1);
             }
             if (fourcard.get(i) == GameDef.CHAT_CO) {
@@ -165,7 +165,7 @@ public class Player {
     public boolean checkShootTheMoon() {
         int demCo = 0;
         for (int i = 0; i < scorecard.size(); i++) {
-            if (Card.getType(scorecard.get(i)) == GameDef.CHAT_CO) {
+            if (card.getType(scorecard.get(i)) == GameDef.CHAT_CO) {
                 demCo++;
             }
         }
@@ -226,7 +226,7 @@ public class Player {
     boolean checkAvableRank(int idCard) {
         if (!dsBai.isEmpty()){
             for (int index=0; index<dsBai.size();index++){
-                if(Card.getType(dsBai.get(index))== Card.getType(idCard))
+                if(card.getType(dsBai.get(index))== card.getType(idCard))
                     return true;
             }
         }

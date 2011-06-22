@@ -160,7 +160,7 @@ public class GameStatePlay extends GameState {
                     this.notice("Ban phai di 2 chuon dau tien !!!");
                 }
             } else if (fourCard.isEmpty()) { // server di truoc
-                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
+                if ((card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
                     this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
                 } else {
                     if (cardClicked == GameDef.ISQBICH && (roundcount == 1)) {
@@ -184,11 +184,11 @@ public class GameStatePlay extends GameState {
                 }
             } else if (fourCard.size() > 0) {// server di sau
                 
-                if (Card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
+                if (card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
 
                     fourCard.add(player[0].playACard(cardClicked));
 
-                    if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
+                    if (card.getType(cardClicked) == GameDef.CHAT_CO) {
                         duocChonCo = true;
                     }
                     drawAllCard();
@@ -552,11 +552,11 @@ public class GameStatePlay extends GameState {
 
     // tra ve id cua quan bai thang trong 4 quan bai danh ra
     protected int check4cardwin() {
-        Card max = new Card(fourCard.get(0));
+        card max = new card(fourCard.get(0));
         for (int i = 0; i < fourCard.size(); i++) {
-            Card c = new Card(fourCard.get(i));
+            card c = new card(fourCard.get(i));
             if (c.greaterThan(max)) {
-                max = new Card(fourCard.get(i));
+                max = new card(fourCard.get(i));
             }
         }
         return max.getID();

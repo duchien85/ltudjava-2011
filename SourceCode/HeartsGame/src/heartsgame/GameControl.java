@@ -30,10 +30,14 @@ public final class GameControl implements Runnable {
 
     public GameControl() {
         gui = new GUI(this);
-        nState = 4;
+        nState = 10;
         gameState = new GameState[nState];
         gameState[GameDef.GAME_MENU] = new GameStateMenu(this,gui);
         gameState[GameDef.GAME_ABOUT] = new GameStateAbout(this,gui);
+
+        gameState[GameDef.GAME_IPCLIENT] = new Game_IPCLIENT(this, gui);
+        gameState[GameDef.GAME_IPSERVER] = new Game_IPSERVER(this, gui);
+
         gameState[GameDef.GAME_WAIT] = new GameStateWait(this,gui);
         //gameState[GameDef.GAME_PLAY] = new GameStatePlay(this,gui);
         
@@ -63,16 +67,16 @@ public final class GameControl implements Runnable {
         gameState[currentState].Enter();
     }
 
-    public void IsClient() {
+    public void IsClient(String IP, int Port) {
         gameState[GameDef.GAME_PLAY] = new GameStatePlayClient(this,gui);
         setType(GameDef.IS_CLIENT);
-        setClient(new Client("localhost", 8999,this));
+        setClient(new Client(IP, Port,this));
     }
 
-    public void IsServer() {
+    public void IsServer(int portserver) {
         gameState[GameDef.GAME_PLAY] = new GameStatePlayServer(this,gui);
         setType(GameDef.IS_SERVER);
-        setServer(new Server(8999,this));
+        setServer(new Server(portserver,this));
     }
 
     /**
