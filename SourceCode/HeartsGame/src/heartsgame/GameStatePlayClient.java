@@ -59,10 +59,7 @@ public class GameStatePlayClient extends GameStatePlay {
                 playState = GameDef.GAME_PLAY_EXCHANGE;
             }
             else if(playState == GameDef.GAME_PLAY_EXCHANGE){
-                System.out.println("Switch to Game Playing !!! ");
-                for(int i=0; i<4;i++){
-                    player[i].setBeginCard(player[i].getListCard());
-                }
+                System.out.println("Switch to Game Playing !!! ");                
                 playState = GameDef.GAME_PLAY_PLAYING;
             }            
         }
@@ -71,18 +68,53 @@ public class GameStatePlayClient extends GameStatePlay {
         }
         else if (msg.startsWith("four")){// tin hieu 4 la bai danh ra
             fourCard.clear();
-            if (playState==GameDef.GAME_PLAY_PLAYING){
-                    if (msg.split("four").length>1){
-                        String fCard = msg.split("four")[1];
-                        String []idcard = fCard.split("c");
-                        for(int i=1; i<idcard.length;i++){
-                            int id = Integer.parseInt(idcard[i]);
-                            fourCard.add(id);
-                        }
+            if (playState == GameDef.GAME_PLAY_PLAYING) {
+                if (msg.split("four").length > 1) {
+                    String fCard = msg.split("four")[1];
+                    String[] idcard = fCard.split("c");
+                    for (int i = 1; i < idcard.length; i++) {
+                        int id = Integer.parseInt(idcard[i]);
+                        fourCard.add(id);
                     }
-                    drawAllCard();
-                    nextturn(); // qua luot cho nguoi ke tiep
                 }
+                nextturn();
+                drawAllCard();
+            }
+        }
+        else if (msg.startsWith("turn")){
+            int turn = Integer.parseInt(msg.split("turn")[1]);
+            if (turn < gameControl.getViTri()){
+                firstturn = (turn+4)-gameControl.getViTri();
+            }else{
+                firstturn= turn - gameControl.getViTri();
+            }
+            
+            currentTurn = firstturn;
+            if (currentTurn ==0)
+                this.notice("Wait for you play ...");
+            else
+                this.notice("Wait for player " + (currentTurn+1)+ " play ....");
+            roundcount++;
+            fourCard.clear();
+            drawAllCard();
+        }
+        else if (msg.startsWith("score")){
+            String[] score= msg.split("score");
+            // cap nhat cac quan bai cho 4 nguoi choi
+            int d = 0;
+            for (int i = 0; i < 4; i++) {
+                int thutu = (gameControl.getViTri() + d) % 4;
+                for (int m = 1; m < score.length; m++) {
+                    int _score = Integer.parseInt(score[m]);
+                    player[i].setScore(_score);
+                }
+                d++;
+            }
+            updateScore();
+        }
+        else if (msg.startsWith("endround"))
+        {
+            processEndRound();
         }
     }
 }
