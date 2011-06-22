@@ -8,10 +8,11 @@ import java.io.*;
 import java.net.*;
 import java.util.Vector;
 
-/**
- *
- * @author kydrenw
- */
+/**/
+// Class : Client
+// Quan ly nhan va truyen du lieu toi server
+// @author kydrenw
+/**/
 public class Client implements Runnable {
 
     private Socket socket = null;
@@ -33,6 +34,7 @@ public class Client implements Runnable {
         }
     }
 
+    // chay tien trinh
     public void run() {
         while (thread != null) {
             try {
@@ -44,7 +46,8 @@ public class Client implements Runnable {
             }
         }
     }
-    
+
+    // gui du lieu den server
     public void SendToServer(String msg){
         try{
             streamOut.writeUTF(msg);
@@ -55,6 +58,7 @@ public class Client implements Runnable {
         }
     }
 
+    // xu ly khi co tin hieu tu server gui den
     public void handle(String msg) {
         if (msg.equals(".bye")) {
             System.out.println("Good bye. Press RETURN to exit ...");
@@ -67,6 +71,9 @@ public class Client implements Runnable {
         }
     }
 
+    // khoi tao cho du lieu nhan va du lieu gui di
+    // streamIn  : du lieu nhan
+    // streamOut : du lieu gui di
     public void start() throws IOException {
         streamIn = new DataInputStream(socket.getInputStream());
         streamOut = new DataOutputStream(socket.getOutputStream());
@@ -76,6 +83,7 @@ public class Client implements Runnable {
         }
     }
 
+    // dung tien trinh
     public void stop() {
         if (thread != null) {
             thread.stop();

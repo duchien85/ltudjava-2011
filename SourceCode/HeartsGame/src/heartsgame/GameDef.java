@@ -28,5 +28,11 @@ public class GameDef {
     static int CARD_WIDTH = 100;
     static int CARD_HEIGHT = 135;
 
+    static int IS2CHUON = 2;
+    static int ISQBICH = 41;
 
+    static int CHAT_CO      = 0;
+    static int CHAT_BICH    = 1;
+    static int CHAT_CHUON   = 2;
+    static int CHAT_RO      = 3;
 }

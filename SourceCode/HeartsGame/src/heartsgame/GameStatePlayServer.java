@@ -14,13 +14,13 @@ import java.util.ArrayList;
  */
 public class GameStatePlayServer extends GameStatePlay {
     public GameStatePlayServer(GameControl gControl, GUI g) {
-        player = new Human[4];
-        player[0] = new Human("Player1");
-        player[1] = new Human("Player2");
-        player[2] = new Human("Player3");
-        player[3] = new Human("Player4");
+        player = new Player[4];
+        player[0] = new Player("Player1");
+        player[1] = new Player("Player2");
+        player[2] = new Player("Player3");
+        player[3] = new Player("Player4");
 
-        fourCard = new ArrayList<card>();
+        fourCard = new ArrayList<Integer>();
         this.gameControl = gControl;
         this.gui = g;
     }
@@ -31,15 +31,20 @@ public class GameStatePlayServer extends GameStatePlay {
             divideCard();
             SendDataCardToClient();
             System.out.println("Switch to Game Exchange !!! ");
+            this.notice("Select 3 cards to exchange !");
             playState = GameDef.GAME_PLAY_EXCHANGE;
         }
 
         else if(playState == GameDef.GAME_PLAY_EXCHANGE){
             // cho nguoi choi doi bai
-            if (!endExchange)
+            if (!endExchange){
+                this.notice("Select 3 cards to exchange !");
                 ReceiveExchange();
-            
-            if(CheckExchange()){                    
+            }
+            else {
+                this.notice("Wait for exchange with other player...");
+
+                if (CheckExchange()) {
                     FindFirstPlay();
                     // ra lenh cho cac client tu tim nguoi di dau tien
                     gameControl.getServer().SendToAllClient("first");
@@ -47,6 +52,7 @@ public class GameStatePlayServer extends GameStatePlay {
                     btnCommand.setEnabled(false);
                     playState = GameDef.GAME_PLAY_PLAYING;
                 }
+            }
         }
 
         else if(playState == GameDef.GAME_PLAY_PLAYING){
@@ -66,31 +72,11 @@ public class GameStatePlayServer extends GameStatePlay {
             ArrayList<Integer> card0 = player[0].getThreeCard();
             ArrayList<Integer> card1 = gameControl.getServer().getCardExchange(0);
             ArrayList<Integer> card2 = gameControl.getServer().getCardExchange(1);
-            ArrayList<Integer> card3 = gameControl.getServer().getCardExchange(2);
-
-            int playerchange =0;
-            for(int i=0; i<3; i++){
-                card _0card = player[0].pullACard(card0.get(i));
-                player[(playerchange+1+i)%4].receiveCard(_0card);
-            }
-            playerchange =1;
-            for (int i=0;i<3;i++){
-                card _1card = player[1].pullACard(card1.get(i));
-                player[(playerchange+1+i)%4].receiveCard(_1card);
-            }
-            playerchange =2;
-            for (int i=0;i<3;i++){
-                card _2card = player[2].pullACard(card2.get(i));
-                player[(playerchange+1+i)%4].receiveCard(_2card);
-            }
-            playerchange =3;
-            for (int i=0;i<3;i++){
-                card _3card = player[3].pullACard(card3.get(i));
-                player[(playerchange+1+i)%4].receiveCard(_3card);
-            }
+            ArrayList<Integer> card3 = gameControl.getServer().getCardExchange(2);      
 
             for(int i=0; i<4;i++){
                 player[i].getThreeCard().clear();
+                player[i].setBeginCard(player[i].getListCard());
             }
 
             SendDataCardToClient();
@@ -100,29 +86,6 @@ public class GameStatePlayServer extends GameStatePlay {
             return true;
         }
         return false;
-    }
-
-    // gui du lieu toi client
-    private void SendDataCardToClient(){
-        // gui du lieu cho cac client
-            String data = "";
-            for (int i =0; i<4;i++){
-                data +="card";
-                for (int j=0;j<player[i].getHandcard().size();j++){
-                    if (this.player[i].getHandCard(j) != null) {
-                        data += "c";
-                        data += this.player[i].getHandCard(j).getID();
-                    }
-                }
-            }
-            gameControl.getServer().SendToAllClient(data);
-
-            String fourData = "four";
-            for(int i=0; i<fourCard.size();i++){
-                fourData += "c";
-                fourData += fourCard.get(i).getID();
-            }
-            gameControl.getServer().SendToAllClient(fourData);
     }
 
     // chia bai
@@ -144,17 +107,20 @@ public class GameStatePlayServer extends GameStatePlay {
             ddau[tam] = 1;
 
             // chia bai cho  nguoi choi
-            card c = new card(tam);
+           
             try {
-                player[p].receiveCard(c);
+                player[p].receiveCard(tam);
                 p = (p+1)%4;
             } catch (Exception e) {
             }
             drawAllCard();
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (Exception e) {
             }
+        }
+        for(int i=0; i<4;i++){
+            player[i].sort();
         }
         System.out.println("Finished dicide card !!! ");
     }
@@ -174,7 +140,7 @@ public class GameStatePlayServer extends GameStatePlay {
 
                 player[vitri].newRound();
                 for (int i =1 ;i<idcard.length;i++){
-                    card c = new card(Integer.parseInt(idcard[i]));
+                    int c = Integer.parseInt(idcard[i]);
                     player[vitri].receiveCard(c);
                 }
                 drawAllCard();
@@ -188,7 +154,7 @@ public class GameStatePlayServer extends GameStatePlay {
                         String fCard = msg.split("four")[1];
                         String []idcard = fCard.split("c");
                         for(int i=1; i<idcard.length;i++){
-                            card c = new card(Integer.parseInt(idcard[i]));
+                            int c = Integer.parseInt(idcard[i]);
                             fourCard.add(c);
                         }
                     }
@@ -199,87 +165,4 @@ public class GameStatePlayServer extends GameStatePlay {
             }
         }
     }
-
-    @Override
-    public void nextturn(){
-        currentTurn = (currentTurn+1)%4;
-        if (fourCard.size()==4){
-            checkEnd4Card();
-        }
-        System.out.println("Wait for player " + (currentTurn+1)+" play ....");
-    }
-    @Override
-    public void ReceiveCardPlay() {
-        if(have2chuon){// neu quan 2 chuon chua dj
-            if (player[0].getHandCard(cardClicked).getID()==2){
-                fourCard.add(player[0].playACard(cardClicked));
-                //drawAllCard();
-                DrawUpdateCard(1);
-                DrawUpdateCard(5);
-                have2chuon = false;
-                SendDataCardToClient();
-                nextturn();
-                try {
-                    Thread.sleep(100);
-                }catch (Exception e){
-
-                }                
-            }
-            else
-                this.notice("Ban phai di 2 chuon dau tien !!!");
-        }
-        else if (fourCard.isEmpty()){ // server di truoc
-            if((player[0].getHandCard(cardClicked).checkCo())&&(!duocChonCo)){
-                this.notice("Ban khong duoc phep chon quan Co");
-            }
-            else{
-                if (player[0].getHandCard(cardClicked).getID()==41)
-                    this.notice("Ban phai di 2 chuon truoc");
-                else{
-                    fourCard.add(player[0].playACard(cardClicked));
-                    //drawAllCard();
-                    DrawUpdateCard(1);
-                    DrawUpdateCard(5);
-                    SendDataCardToClient();
-                    nextturn();
-                    try{
-                        Thread.sleep(100);
-                    }catch(Exception e){
-
-                    }                    
-                }
-            }
-        }
-        else if (fourCard.size()>0){// server di sau
-            if((player[0].getHandCard(cardClicked).checkSameRank(fourCard.get(0)))||
-            (!player[0].checkAvableRank(fourCard.get(0)))){
-                if (player[0].getHandCard(cardClicked).checkCo())
-                    duocChonCo=true;
-
-                fourCard.add(player[0].playACard(cardClicked));
-                               
-                //drawAllCard();
-                DrawUpdateCard(1);
-                DrawUpdateCard(5);
-                
-                SendDataCardToClient();
-                nextturn();
-
-                try {
-                    Thread.sleep(100);
-                }catch(Exception e) {
-
-                }
-            }
-            else
-                this.notice("Ban phai di cung chat voi la dau tien");
-        }
-    }
-
-    
-
-
-
-
-    
 }
