@@ -5,126 +5,147 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-class CardComparator implements Comparator<card> {
+class CardComparator implements Comparator<Integer> {
 
-    public int compare(card card1, card card2) {
-        if (card1.getRankOfSet() > card2.getRankOfSet()) {
+    public int compare(Integer IDcard1, Integer IDcard2) {
+        int type1 = IDcard1%4;
+        int rank1 = IDcard1/4 + 1;
+        int type2 = IDcard2%4;
+        int rank2 = IDcard2/4 + 1;
+
+        if (type1 > type2) {
             return 1;
-        } else if (card1.getRankOfSet() < card2.getRankOfSet()) {
+        } else if (type1 < type2) {
             return -1;
         } else {
-            if (card1.getID() > card2.getID()) {
+            if (rank1 > rank2) {
                 return 1;
-            } else if (card1.getID() < card2.getID()) {
+            } else if (rank1 < rank2) {
                 return -1;
             } else {
                 return 0;
             }
         }
     }
-}
-abstract public class Player {
 
+}
+
+public class Player {
+
+    // name cua nguoi choi
     protected String name;
-    private List<card> handcard;
-    protected Boolean[] playedcard;
-    protected ArrayList<card> scorecard;
+    // danh sach cac quan bai sau khi trao bai
+    private List<Integer> beginCard;
+    // danh sach cac quan bai hien co
+    // luu id cua quan bai
+    private List<Integer> dsBai;
+    
+    // mang chua cac quan bai an duoc
+    // luu cac id cua quan bai
+    protected ArrayList<Integer> scorecard;
+
     // mang chua 3 la bai de hoan doi
+    // luu cac id cua quan bai
     private ArrayList<Integer> threeCard;
+
+    // score so cua nguoi choi
     protected int score;
 
     public Player() {
-        name = "";
-        score = 0;
-        handcard = new ArrayList<card>();
-        playedcard = new Boolean[13];
-        scorecard = new ArrayList<card>();
-        threeCard = new ArrayList<Integer>();
+        Init();
     }
 
+    public Player(String argName) {
+        Init();
+        name = argName;
+    }
+
+    private void Init(){
+        name = "";
+        score = 0;
+        beginCard = new ArrayList<Integer>();
+        dsBai = new ArrayList<Integer>();
+        scorecard = new ArrayList<Integer>();
+        threeCard = new ArrayList<Integer>();
+    }
+    // dat ten cho nguoi choi
     public void setName(String name) {
         this.name = name;
     }
 
+    // lay ten nguoi choi
     public String getName() {
         return name;
     }
 
+    // gan score so cho nguoi choi
     public void setScore(int score) {
         this.score = score;
     }
 
+    // lay score cua nguoi choi
     public int getScore() {
         return score;
     }
 
+    // cong score cho nguoi choi
     public void addScore(int score) {
         this.score += score;
     }
 
-    public boolean checkAvableCard(int index) {
-        return !(playedcard[index]);
-    }
-
-    public void receiveCard(card c) {
-        if(c!=null)
+    // nhan them quan bai
+    public void receiveCard(int id) {
+        if(id>0 && id<53)
         {
-            getHandcard().add(c);
-            sort();
+            getListCard().add(id);
         }
     }
 
-    /*
-    public void receiveCard(int index, card c) {
-        handcard[index] = c;
-        sortcard();
+    // lay id cua quan bai tai chi so index
+    public int getIDCardAt(int index) {
+        if (index < dsBai.size())
+            return dsBai.get(index);       
+        return -1;
     }
-*/
-    public card getHandCard(int index) {
-        try {
-            if (index < handcard.size()) {
-                return handcard.get(index);
+
+    // danh ra 1 quan bai
+    // id : id quan bai can danh ra
+    // thanh cong : tra ve quan bai danh ra
+    // that bai(khong co quan bai trong ds bai) : tra ve -1
+
+    public int playACard(int idCard) {
+        if (!dsBai.isEmpty()){
+            for (int index=0; index<dsBai.size();index++){
+                if (getIDCardAt(index)==idCard){
+                    dsBai.remove(index);
+                    return idCard;
+                }
             }
         }
-        catch(Exception ex){
-            System.out.println(ex.toString());
-        }
-        return null;
+        return -1;
     }
-
-    public card pullACard(int index) {
-        if (index < getHandcard().size()){
-            card tam = getHandcard().get(index);
-            getHandcard().remove(index);
-            sort();
-            return tam;
-        }
-        return null;
-    }
+/*
+ *
+ */
 
     public boolean isContainCard(int cardID) {
-        for (int i = 0; i < getHandcard().size(); i++) {
-            if (getHandcard().get(i).getID() == cardID) {
+        for (int i = 0; i < beginCard.size(); i++) {
+            if (beginCard.get(i) == cardID) {
                 return true;
             }
         }
         return false;
     }
-
-    public boolean playCardContain(int cardID){
-
-        return false;
+    public void sort(){
+        Collections.sort(dsBai,new CardComparator());
     }
-    private void sort(){
-        Collections.sort(handcard,new CardComparator());
-    }
-    public void add4scorecard(ArrayList<card> fourcard) {
+    public void add4scorecard(ArrayList<Integer> fourcard) {
         for (int i = 0; i <= 3; i++) {
             scorecard.add(fourcard.get(i));
-            if (fourcard.get(i).checkCo()) {
+            if (Card.getType(fourcard.get(i)) == GameDef.CHAT_CO) {
                 addScore(1);
             }
-            if (fourcard.get(i).getID() == 41) {
+            if (fourcard.get(i) == GameDef.CHAT_CO) {
                 addScore(13);
             }
         }
@@ -132,10 +153,8 @@ abstract public class Player {
     }
 
     public void newRound() {
-        getHandcard().clear();
-        for (int i = 0; i < 13; i++) {
-            playedcard[i] = false;
-        }
+        beginCard.clear();
+        getListCard().clear();
         scorecard.clear();
     }
 
@@ -146,13 +165,13 @@ abstract public class Player {
     public boolean checkShootTheMoon() {
         int demCo = 0;
         for (int i = 0; i < scorecard.size(); i++) {
-            if (scorecard.get(i).checkCo()) {
+            if (Card.getType(scorecard.get(i)) == GameDef.CHAT_CO) {
                 demCo++;
             }
         }
         if (demCo == 13) {
             for (int i = 0; i < scorecard.size(); i++) {
-                if (scorecard.get(i).getID() == 41) {
+                if (scorecard.get(i) == GameDef.ISQBICH) {
                     addScore(-26);
                     return true;
                 }
@@ -163,14 +182,16 @@ abstract public class Player {
         }
     }
 
-    public card play2bich() {
-        for (int i = 0; i < handcard.size(); i++) {
-            if (getHandcard().get(i).getID() == 2) {
-                playedcard[i] = true;
-                return getHandcard().get(i);
+    // danh quan 2 chuon
+    public int play2chuon() {
+        for (int i = 0; i < dsBai.size(); i++) {
+            if (getListCard().get(i) == GameDef.IS2CHUON) {
+                int id = getListCard().get(i);;
+                playACard(GameDef.IS2CHUON);
+                return id;
             }
         }
-        return null;
+        return -1;
     }
 
     /**
@@ -190,36 +211,29 @@ abstract public class Player {
     /**
      * @return
      */
-    public ArrayList<card> getHandcard() {
-        return (ArrayList<card>) handcard;
+    public ArrayList<Integer> getListCard() {
+        return (ArrayList<Integer>) dsBai;
     }
 
     /**
-     * @param handcard  to set
+     * @param dsBai  to set
      */
-    public void setHandcard(ArrayList<card> handcard) {
-        this.handcard = handcard;
+    public void setHandcard(ArrayList<Integer> handcard) {
+        this.dsBai = handcard;
     }
 
-    public card playACard(int index) {
-        if (index < handcard.size()){
-            playedcard[index] = true;
-            card c = getHandcard().get(index);
-            handcard.remove(index);
-            sort();
-            return c;
-        }
-        return null;
-    }
-
-    boolean checkAvableRank(card c) {
-        for (int i=0;i<handcard.size();i++){
-            if (playedcard[i]==false){
-                if(c.checkSameRank(handcard.get(i))){
-                   return true;
-                }
+    // kiem tra xem trong danh sach bai con quan nao cung chat voi quan bai co ID = idCArd
+    boolean checkAvableRank(int idCard) {
+        if (!dsBai.isEmpty()){
+            for (int index=0; index<dsBai.size();index++){
+                if(Card.getType(dsBai.get(index))== Card.getType(idCard))
+                    return true;
             }
-	}
+        }
         return false;
+    }
+
+    public void setBeginCard(ArrayList<Integer> listCard){
+        this.beginCard = listCard;
     }
 }

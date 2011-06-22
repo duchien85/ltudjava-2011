@@ -4,10 +4,10 @@
  */
 package heartsgame;
 
+import com.sun.org.apache.xerces.internal.xs.StringList;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.ImageIcon;
@@ -28,7 +28,7 @@ public class GameStatePlay extends GameState {
     protected JButton btnCommand;
     protected JLabel note;
     protected Player[] player;
-    protected ArrayList<card> fourCard;
+    protected ArrayList<Integer> fourCard;
     protected int cardClicked = -1;
     protected int currentTurn = -1;
     protected int firstturn = -1;
@@ -38,6 +38,7 @@ public class GameStatePlay extends GameState {
     protected boolean duocChonCo = false;
     protected int roundcount = 0;
     JButton btnRemoveGUI;
+
     public GameStatePlay() {
     }
 
@@ -64,20 +65,7 @@ public class GameStatePlay extends GameState {
                 }
             }
         });
-        gui.container.add(btnCommand);
-
-        // hien diem so
-        Font f = new Font(Font.SANS_SERIF, Font.TRUETYPE_FONT, 20);
-        score = new JLabel[4];
-        for (int i = 0; i <= 3; i++) {
-            score[i] = new JLabel();
-            score[i].setFont(f);
-            gui.container.add(score[i]);
-        }
-        score[0].setBounds(120, 470, 100, 30);
-        score[1].setBounds(10, 40, 100, 30);
-        score[2].setBounds(580, 7, 100, 30);
-        score[3].setBounds(690, 500, 100, 30);
+        gui.container.add(btnCommand,0);
 
         // tao notice o duoi
         note = new JLabel("This is the help !!!");
@@ -86,8 +74,27 @@ public class GameStatePlay extends GameState {
         pn.setBackground(Color.LIGHT_GRAY);
         pn.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         pn.setBounds(0, 538, GameDef.WIDTH, 30);
-        gui.container.add(pn);
+        gui.container.add(pn,1);
+
+        // hien diem so
+        Font f = new Font(Font.SANS_SERIF, Font.TRUETYPE_FONT, 20);
+        score = new JLabel[4];
+        for (int i = 0; i <= 3; i++) {
+            score[i] = new JLabel();
+            score[i].setFont(f);
+            gui.container.add(score[i],i+2);
+        }
+        score[0].setBounds(120, 470, 100, 30);
+        score[1].setBounds(10, 40, 100, 30);
+        score[2].setBounds(580, 7, 100, 30);
+        score[3].setBounds(690, 500, 100, 30);
+
         gui.repaint();
+
+        playercard0 = new ArrayList<JLabel>();
+        playercard1 = new ArrayList<JLabel>();
+        playercard2 = new ArrayList<JLabel>();
+        playercard3 = new ArrayList<JLabel>();
     }
 
     // cho chon 3 la bai de trao doi
@@ -118,17 +125,96 @@ public class GameStatePlay extends GameState {
 
     protected void nextturn() {
         currentTurn = (currentTurn + 1) % 4;
+        if (fourCard.size() == 4) {
+                checkEnd4Card();
+        }
+
+        System.out.println("Wait for player " + (currentTurn + 1) + " play ....");
+        if (currentTurn != 0)
+            this.notice("Wait for player " + (currentTurn + 1) + " play ....");
+        else
+            this.notice("Wait to you play ...");
+
     }
 
     protected void ReceiveCardPlay() {
-    }
+        if (player[0].isContainCard(cardClicked)) {
+            this.notice("This is a help !!!");
+            if (have2chuon) {// neu quan 2 chuon chua dj
+                if (cardClicked == GameDef.IS2CHUON) {
+                    fourCard.add(player[0].playACard(cardClicked));
+                    drawAllCard();
+                    have2chuon = false;
 
+                    if (gameControl.getType() == GameDef.IS_SERVER) {
+                        SendDataCardToClient();
+                        nextturn();
+                    } else
+                        SendDataCardToServer();
+                    
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                    }
+                } else {
+                    this.notice("Ban phai di 2 chuon dau tien !!!");
+                }
+            } else if (fourCard.isEmpty()) { // server di truoc
+                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==1)) {
+                    this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
+                } else {
+                    if (cardClicked == GameDef.ISQBICH && (roundcount == 1)) {
+                        this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di dau tien");
+                    } else {
+                        fourCard.add(player[0].playACard(cardClicked));
+                        drawAllCard();
+
+                        if (gameControl.getType() == GameDef.IS_SERVER) {
+                            SendDataCardToClient();
+                            nextturn();
+                        } else {
+                            SendDataCardToServer();
+                        }
+                        
+                        try {
+                            Thread.sleep(100);
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            } else if (fourCard.size() > 0) {// server di sau
+                
+                if (Card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
+
+                    fourCard.add(player[0].playACard(cardClicked));
+
+                    if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
+                        duocChonCo = true;
+                    }
+                    drawAllCard();
+                    
+                    if (gameControl.getType() == GameDef.IS_SERVER) {
+                        SendDataCardToClient();
+                        nextturn();
+                    } else
+                        SendDataCardToServer();                    
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (Exception e) {
+                    }
+                } else {
+                    this.notice("Ban phai di cung chat voi la dau tien");
+                }
+            }
+        }
+    }
+    
     protected void ChangeCard(String mess) {
         // reset lai cac quan bai
         for (int n = 0; n < 4; n++) {
-            player[n].newRound();
+            player[n].getListCard().clear();
         }
-
         // doc du lieu tu goi tin nhan duoc
         String[] pcard = mess.split("card");
         String[][] mycard = new String[4][];
@@ -142,12 +228,12 @@ public class GameStatePlay extends GameState {
             int thutu = (gameControl.getViTri() + d) % 4;
             for (int m = 1; m < mycard[thutu].length; m++) {
                 int id = Integer.parseInt(mycard[thutu][m]);
-                card c = new card(id);
-                player[j].receiveCard(c);
-                drawAllCard();
+                player[j].receiveCard(id);
+                
             }
             d++;
         }
+        drawAllCard();
     }
 
     protected void notice(String st) {
@@ -166,54 +252,54 @@ public class GameStatePlay extends GameState {
         for (int i = 0; i < 4; i++) {
             score[i].setText("Score: " + String.valueOf(player[i].getScore()));
         }
+        gui.repaint();
     }
 
     private ArrayList<JLabel> loadCard(Player _player, boolean showcard) {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
         String path;
-        for (int i = 0; i < _player.getHandcard().size(); i++) {
-            if (_player.getHandCard(i) != null) {
-                if (showcard == true) {
-                    path = "52card\\" + _player.getHandCard(i).getID() + ".jpg";
-                } else {
-                    path = "52card\\0-2.jpg";
-                }
-                im = new ImageIcon(path);
-                kq.add(new JLabel(im));
-                if (showcard) {
-                    kq.get(i).setName(String.valueOf(i));
-                    kq.get(i).addMouseListener(new MouseListener() {
-
-                        public void mouseClicked(MouseEvent e) {
-                        }
-
-                        public void mousePressed(MouseEvent e) {
-                            cardClicked = Integer.parseInt(e.getComponent().getName());
-                        }
-
-                        public void mouseReleased(MouseEvent e) {
-                        }
-
-                        public void mouseEntered(MouseEvent e) {
-                        }
-
-                        public void mouseExited(MouseEvent e) {
-                        }
-                    });
-
-                }
+        for (int i = 0; i < _player.getListCard().size(); i++) {
+            if (showcard == true) {
+                path = "52card\\" + _player.getIDCardAt(i) + ".jpg";
+            } else {
+                path = "52card\\0-2.jpg";
             }
+            im = new ImageIcon(path);
+            kq.add(new JLabel(im));
+            if (showcard) {
+                kq.get(i).setName(String.valueOf(_player.getIDCardAt(i)));
+                kq.get(i).addMouseListener(new MouseListener() {
+
+                    public void mouseClicked(MouseEvent e) {
+                    }
+
+                    public void mousePressed(MouseEvent e) {
+                        cardClicked = Integer.parseInt(e.getComponent().getName());
+                    }
+
+                    public void mouseReleased(MouseEvent e) {
+                    }
+
+                    public void mouseEntered(MouseEvent e) {
+                    }
+
+                    public void mouseExited(MouseEvent e) {
+                    }
+                });
+
+            }
+
         }
         return kq;
     }
 
-    private ArrayList<JLabel> loadCard(ArrayList<card> fourcard) {
+    private ArrayList<JLabel> loadCard(ArrayList<Integer> fourcard) {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
         String path;
         for (int i = 0; i < fourcard.size(); i++) {
-            path = "52card\\" + fourcard.get(i).getID() + ".jpg";
+            path = "52card\\" + fourcard.get(i) + ".jpg";
             im = new ImageIcon(path);
             kq.add(new JLabel(im));
         }
@@ -221,18 +307,28 @@ public class GameStatePlay extends GameState {
     }
 
     protected void drawCards(ArrayList<JLabel> jls, int position) {
-        final int khoangcach = 20;
+        final int khoangcach = 20;        
         if (!jls.isEmpty()) {
             int x;
             int y;
             switch (position) {
-                case 1:
-                    x = (GameDef.WIDTH - khoangcach * 12 - GameDef.CARD_WIDTH) / 2;
+                case 1:  
+                    x = (GameDef.WIDTH - khoangcach * 12 - GameDef.CARD_WIDTH) / 2;                    
                     for (int i = 0; i < jls.size(); i++) {
                         if (jls.get(i) != null) {
                             jls.get(i).setBounds(x, 398, 100, 135);
                             x += khoangcach;
-                            gui.container.add(jls.get(i),2);
+                            gui.container.add(jls.get(i),6);
+                        }
+                    }                    
+                    break;
+                case 2:
+                    y = (GameDef.HEIGHT - khoangcach * 12 - GameDef.CARD_HEIGHT) / 3;
+                    for (int i = 0; i < jls.size(); i++) {
+                        if (jls.get(i) != null) {
+                            jls.get(i).setBounds(7, y + 30, 100, 135);
+                            y += khoangcach;
+                            gui.container.add(jls.get(i), 6);
                         }
                     }
                     break;
@@ -242,17 +338,7 @@ public class GameStatePlay extends GameState {
                         if (jls.get(i) != null) {
                             jls.get(i).setBounds(x, 35, 100, 135);
                             x += khoangcach;
-                            gui.container.add(jls.get(i),2);
-                        }
-                    }
-                    break;
-                case 2:
-                    y = (GameDef.HEIGHT - khoangcach * 12 - GameDef.CARD_HEIGHT) / 3;
-                    for (int i = 0; i < jls.size(); i++) {
-                        if (jls.get(i) != null) {
-                            jls.get(i).setBounds(7, y + 30, 100, 135);
-                            y += khoangcach;
-                            gui.container.add(jls.get(i),2);
+                            gui.container.add(jls.get(i), 6);
                         }
                     }
                     break;
@@ -262,7 +348,7 @@ public class GameStatePlay extends GameState {
                         if (jls.get(i) != null) {
                             jls.get(i).setBounds(GameDef.WIDTH - GameDef.CARD_WIDTH - 15, y + 30, 100, 135);
                             y += khoangcach;
-                            gui.container.add(jls.get(i),2);
+                            gui.container.add(jls.get(i), 6);
                         }
                     }
                     break;
@@ -271,65 +357,65 @@ public class GameStatePlay extends GameState {
                     for (int i = 0; i < jls.size(); i++) {
                         jls.get(i).setBounds(x, 220, 100, 135);
                         x += khoangcach;
-                        gui.container.add(jls.get(i),2);
+                        gui.container.add(jls.get(i), 6);
                     }
                     break;
-
-            }
-            gui.Paint(position);
+            }         
         }
     }
 
     protected void clear4play() {
-        while (gui.getComponentCount() > 2) {
-            gui.remove(2);
-        }
-        //gui.container.removeAll();
+        while (gui.container.getComponentCount() > 6) {
+            gui.container.remove(gui.container.getComponentCount()-1);
+        }        
     }
 
-    protected void DrawUpdateCard(int index){
-        switch(index){
+    protected void DrawUpdateCard(int index) {
+        switch (index) {
             case 1:
-                playercard0= new ArrayList<JLabel>();
                 playercard0 = loadCard(player[0], true);
                 drawCards(playercard0, 1);
                 break;
             case 2:
-                playercard1= new ArrayList<JLabel>();
                 playercard1 = loadCard(player[1], false);
                 drawCards(playercard1, 2);
                 break;
             case 3:
-                playercard2= new ArrayList<JLabel>();
                 playercard2 = loadCard(player[2], false);
                 drawCards(playercard2, 3);
                 break;
             case 4:
-                playercard3 = new ArrayList<JLabel>();
                 playercard3 = loadCard(player[3], false);
                 drawCards(playercard3, 4);
                 break;
             case 5:
-                game4card = new ArrayList<JLabel>();
                 game4card = loadCard(fourCard);
                 drawCards(game4card, 5);
                 break;
         }
     }
+
     public void drawAllCard() {
         clear4play();
-        for (int i=1;i<=5;i++){
+        for (int i=0; i<=5;i++){
             DrawUpdateCard(i);
         }
+	gui.repaint();
         updateScore();
     }
 
     protected void setnormal(int cardClicked) {
-        playercard0.get(cardClicked).setEnabled(true);
+        for (int i=0;i<playercard0.size();i++){
+            if (playercard0.get(i).getName().equals(String.valueOf(cardClicked)))
+                  playercard0.get(i).setEnabled(true);
+        }
     }
 
     protected void sethightlight(int cardClicked) {
-        playercard0.get(cardClicked).setEnabled(false);
+        for (int i=0;i<playercard0.size();i++){
+            if (playercard0.get(i).getName().equals(String.valueOf(cardClicked)))
+                playercard0.get(i).setEnabled(false);
+        }
     }
 
     private void AceptExchange() {
@@ -356,26 +442,30 @@ public class GameStatePlay extends GameState {
                 break;
             }
         }
-        if(firstturn==0)
+        if (firstturn == 0) {
             have2chuon = true;
-        else
-            have2chuon= false;
+        } else {
+            have2chuon = false;
+        }
         System.out.println("Player " + (firstturn + 1) + " play first !!!");
+        
+        if (firstturn==0)
+            this.notice("You play first !");
+        else
+            this.notice("Player " + (firstturn + 1) + " play first !!!");
     }
 
     protected void checkEnd4Card() {
         if (fourCard.size() == 4) {
-            card winCard = check4cardwin();
+            int winCard = check4cardwin();
             for (int i = 0; i < 4; i++) {
-                if (player[i].isContainCard(winCard.getID())) {
+                if (player[i].isContainCard(winCard)) {
                     player[i].add4scorecard(fourCard);
                     firstturn = i;
                     currentTurn = firstturn;
                     break;
                 }
             }
-
-            drawAllCard();
             try {
                 Thread.sleep(100);
             } catch (Exception e) {
@@ -383,6 +473,8 @@ public class GameStatePlay extends GameState {
             roundcount++;
             fourCard.clear();
             drawAllCard();
+
+            //gui.Paint(5);
             if (roundcount == 13) {
                 processEndRound();
             }
@@ -458,13 +550,52 @@ public class GameStatePlay extends GameState {
         }
     }
 
-    protected card check4cardwin() {
-        card max = fourCard.get(0);
+    // tra ve id cua quan bai thang trong 4 quan bai danh ra
+    protected int check4cardwin() {
+        Card max = new Card(fourCard.get(0));
         for (int i = 0; i < fourCard.size(); i++) {
-            if (fourCard.get(i).greaterThan(max)) {
-                max = fourCard.get(i);
+            Card c = new Card(fourCard.get(i));
+            if (c.greaterThan(max)) {
+                max = new Card(fourCard.get(i));
             }
         }
-        return max;
+        return max.getID();
+    }
+
+    // gui du lieu toi client
+    protected void SendDataCardToClient() {
+        // gui du lieu cho cac client
+        String data = "";
+        for (int i = 0; i < 4; i++) {
+            data += "card";
+            for (int j = 0; j < player[i].getListCard().size(); j++) {
+                data += "c";
+                data += this.player[i].getIDCardAt(j);
+            }
+        }
+        gameControl.getServer().SendToAllClient(data);
+
+        String fourData = "four";
+        for (int i = 0; i < fourCard.size(); i++) {
+            fourData += "c";
+            fourData += fourCard.get(i);
+        }
+        gameControl.getServer().SendToAllClient(fourData);
+    }
+
+    private void SendDataCardToServer(){
+        String cardData = "play" + gameControl.getViTri() + "play";
+        for (int i=0; i<player[0].getListCard().size();i++){
+            cardData += "c";
+            cardData += player[0].getIDCardAt(i);
+        }
+        gameControl.getClient().SendToServer(cardData);
+
+        String fourData = "four";
+        for(int i=0; i<fourCard.size();i++){
+            fourData += "c";
+            fourData += fourCard.get(i);
+        }
+        gameControl.getClient().SendToServer(fourData);
     }
 }
