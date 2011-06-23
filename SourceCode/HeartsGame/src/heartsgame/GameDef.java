@@ -26,6 +26,7 @@ public class GameDef {
 
     static int IS_SERVER = 0;
     static int IS_CLIENT = 1;
+    static int IS_SINGLE = 2;
 
     static int WIDTH = 800;
     static int HEIGHT = 600;

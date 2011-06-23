@@ -76,9 +76,21 @@ public class GameStateMenu extends GameState {
         });
         gui.container.add(btnConnect,0);
 
+         // them button Single player
+        JButton btnSinglePlayer = new JButton("Single Player");
+        btnSinglePlayer.setBounds(330, 260, 150, 20);
+        btnSinglePlayer.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                gameControl.SwitchState(GameDef.GAME_WAIT);
+                gameControl.SinglePlay();
+            }
+        });
+        gui.container.add(btnSinglePlayer);
+        
         // them button About
         JButton btnAbout = new JButton("About");
-        btnAbout.setBounds(330, 260, 150, 20);
+        btnAbout.setBounds(330, 290, 150, 20);
         btnAbout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
