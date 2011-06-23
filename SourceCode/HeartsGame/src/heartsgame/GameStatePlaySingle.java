@@ -114,13 +114,12 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 Thread.sleep(delay);
             } catch (Exception e) {
             }
-            have2chuon = false;
+            bChuaDi2chuon = false;
             nextturn();
 //            is2bichplayed = true;
             nextturn();
         }
         drawAllCard();
-        // showbutton("play Card");
         btnCommand.setVisible(false);
         playState = GameDef.GAME_PLAY_PLAYING;
         computerPlay();
@@ -167,16 +166,6 @@ public class GameStatePlaySingle extends GameStatePlay  {
         }
     }
 
-//
-//      @Override
-//    public void nextturn(){
-//        currentTurn = (currentTurn+1)%4;
-//        if (fourCard.size()==4){
-//            checkEnd4Card();
-//        }
-//        System.out.println("Wait for player " + (currentTurn+1)+" play ....");
-//    }
-      
 
  
 
