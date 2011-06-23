@@ -6,7 +6,7 @@ package heartsgame;
 
 import java.awt.event.*;
 import java.io.*;
-import javax.swing.JButton;
+import javax.swing.*;
 
 /**
  *
@@ -39,6 +39,10 @@ public class GameStateWait extends GameState {
     public void Enter(){
         gui.container.removeAll();
 
+        JLabel bg= new JLabel(new ImageIcon("52card\\bg.jpg"));
+        bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
+        gui.container.add(bg);
+
         // them button New Game
         JButton btnWait = new JButton("Waiting ... ");
         btnWait.setBounds(330, 200, 150, 20);
@@ -49,7 +53,7 @@ public class GameStateWait extends GameState {
                 //gameControl.SwitchState(GameDef.GAME_WAIT);
             }
         });
-        gui.container.add(btnWait);
+        gui.container.add(btnWait,0);
         gui.repaint();
     }
     @Override
