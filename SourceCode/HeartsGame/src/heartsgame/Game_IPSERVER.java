@@ -27,6 +27,10 @@ public class Game_IPSERVER extends GameState {
     {
         gui.container.removeAll();
 
+        JLabel bg= new JLabel(new ImageIcon("52card\\bg.jpg"));
+        bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
+        gui.container.add(bg);
+
         JLabel JL_PortServer = new JLabel("Port:");
         JL_PortServer.setBounds(310, 215, 50, 50);
 
@@ -36,19 +40,15 @@ public class Game_IPSERVER extends GameState {
 
         JButton JBT_Listen = new JButton("Listen");
 
-        gui.container.add(JL_PortServer);
+        gui.container.add(JL_PortServer,0);
 
-        gui.container.add(JTFPortServer);
+        gui.container.add(JTFPortServer,0);
 
         JBT_Listen.setBounds(400, 260, 100, 20);
 
         final JOptionPane jop = new JOptionPane("Thông Báo");
 
-        jop.setBounds(300, 300, 300, 300);
-        
-        
-
-
+        jop.setBounds(300, 300, 300, 300);     
 
         JBT_Listen.addActionListener(new ActionListener() {
 
@@ -67,9 +67,9 @@ public class Game_IPSERVER extends GameState {
                 }
             }
         });
-        gui.container.add(jop);
+        //gui.container.add(jop,0);
 
-        gui.container.add(JBT_Listen);
+        gui.container.add(JBT_Listen,0);
 
         gui.repaint();
 
