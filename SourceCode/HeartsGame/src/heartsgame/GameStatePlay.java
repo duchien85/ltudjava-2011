@@ -426,6 +426,9 @@ public class GameStatePlay extends GameState {
             for (int i = 0; i < 3; i++) {
                 data += "c";
                 data += player[0].getThreeCard().get(i);
+
+
+
             }
             gameControl.getClient().SendToServer(data);
         }

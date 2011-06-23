@@ -39,6 +39,8 @@ public class Game_IPCLIENT extends GameState {
 
         final JTextField textip = new JTextField();
 
+
+        textip.setText("127.0.0.1");
         textip.setBounds(350, 200, 150, 20);
 
         final JTextField textport = new JTextField();
