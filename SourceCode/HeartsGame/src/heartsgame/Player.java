@@ -239,10 +239,29 @@ public class Player {
     
     public int playfirst(boolean duocChonCo) 
     {
-        return -1;
+          SecureRandom numGenerate = new SecureRandom();
+        int random = 0;
+
+        while ((getListCard().get(random) == 41) || (Card.getType(getListCard().get(random)) == GameDef.CHAT_CO && (!duocChonCo))) {
+            random = numGenerate.nextInt(getListCard().size());
+        }
+        return playACard(getListCard().get(random));
     }
     
-    public int playfollow(int c) {
-        return -1;
+    public int playfollow(int id) {
+           ArrayList<Integer> samerank = new ArrayList<Integer>();
+        for (int i = 0; i < getListCard().size(); ++i)
+        {
+            if (Card.dongChat(id, getListCard().get(i)))
+                samerank.add(i);
+        }
+        if (!samerank.isEmpty()) {
+            SecureRandom numGenerate = new SecureRandom();
+            int random = 0;
+            random = numGenerate.nextInt(samerank.size());            
+            return playACard(samerank.get(random));
+        } else {
+            return playfirst(true);
+        }
     }
 }
