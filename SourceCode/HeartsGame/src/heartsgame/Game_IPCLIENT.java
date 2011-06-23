@@ -79,6 +79,18 @@ public class Game_IPCLIENT extends GameState {
         });
 
         //gui.container.add(jop,0);
+
+        // them button Back to Menu
+        JButton btnAbout = new JButton("Back to Menu");
+        btnAbout.setBounds(350, 300, 150, 20);
+        btnAbout.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                gameControl.SwitchState(GameDef.GAME_MENU);
+            }
+        });
+        gui.container.add(btnAbout,0);
+
         gui.container.add(btnConnect,0);
         gui.repaint();
     }
