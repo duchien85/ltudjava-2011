@@ -36,7 +36,8 @@ public class GameStatePlay extends GameState {
     protected boolean have2chuon = false;
     protected boolean duocChonCo = false;
     protected int roundcount = 0;
-    JButton btnRemoveGUI;
+    protected int numGame = 1;
+   
 
     public GameStatePlay() {
     }
@@ -427,9 +428,6 @@ public class GameStatePlay extends GameState {
             for (int i = 0; i < 3; i++) {
                 data += "c";
                 data += player[0].getThreeCard().get(i);
-
-
-
             }
             gameControl.getClient().SendToServer(data);
         }
@@ -464,7 +462,8 @@ public class GameStatePlay extends GameState {
                 + "  Player 3 : " + player[2].getScore() + "  Player 4 :  " + player[3].getScore());
 
         if (check100score() == false) {
-            showbutton("New Round");            
+            showbutton("New Round");   
+            newRound();
         } else {
             showbutton("New Game");
             if (getMinScore() == 0) {
@@ -573,5 +572,22 @@ public class GameStatePlay extends GameState {
             fourData += fourCard.get(i);
         }
         gameControl.getClient().SendToServer(fourData);
+    }
+
+    private void newRound() {
+        numGame++;
+        for (int i=0; i<4;i++){
+            player[i].newRound();
+        }
+        if ((numGame%4)==0){
+            playState = GameDef.GAME_PLAY_PLAYING;
+            endExchange = true;
+        }
+        else
+            endExchange = false;
+        
+        have2chuon = false;
+        duocChonCo = false;
+
     }
 }
