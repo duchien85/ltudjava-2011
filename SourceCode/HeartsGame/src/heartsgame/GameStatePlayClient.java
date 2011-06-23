@@ -99,15 +99,13 @@ public class GameStatePlayClient extends GameStatePlay {
             drawAllCard();
         }
         else if (msg.startsWith("score")){
-            String[] score= msg.split("score");
+            String[] pscore= msg.split("score");
             // cap nhat cac quan bai cho 4 nguoi choi
             int d = 0;
-            for (int i = 0; i < 4; i++) {
-                int thutu = (gameControl.getViTri() + d) % 4;
-                for (int m = 1; m < score.length; m++) {
-                    int _score = Integer.parseInt(score[m]);
-                    player[i].setScore(_score);
-                }
+            for (int i = 1; i <= 4; i++) {
+                int thutu = (gameControl.getViTri() + d) % 4;                
+                    int _score = Integer.parseInt(pscore[i]);
+                    player[thutu].setScore(_score);                
                 d++;
             }
             updateScore();

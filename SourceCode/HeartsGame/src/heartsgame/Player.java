@@ -132,7 +132,7 @@ public class Player {
             if (Card.getType(fourcard.get(i)) == GameDef.CHAT_CO) {
                 addScore(1);
             }
-            if (fourcard.get(i) == GameDef.CHAT_CO) {
+            if (fourcard.get(i) == GameDef.ISQBICH) {
                 addScore(13);
             }
         }

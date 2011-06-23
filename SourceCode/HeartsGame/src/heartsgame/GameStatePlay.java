@@ -83,11 +83,12 @@ public class GameStatePlay extends GameState {
             score[i].setFont(f);
             gui.container.add(score[i],i+2);
         }
-        score[0].setBounds(120, 470, 100, 30);
-        score[1].setBounds(10, 40, 100, 30);
-        score[2].setBounds(580, 7, 100, 30);
-        score[3].setBounds(690, 500, 100, 30);
-
+        
+        score[3].setBounds(12, 50, 100, 30);
+        score[2].setBounds(350, 6, 100, 30);
+        score[1].setBounds(700, 500, 100, 30);
+        score[0].setBounds(350, 360, 100, 30);
+        
         gui.repaint();
 
         playercard0 = new ArrayList<JLabel>();
@@ -414,7 +415,7 @@ public class GameStatePlay extends GameState {
                 playercard0.get(i).setEnabled(false);
         }
     }
-
+    
     private void AceptExchange() {
         endExchange = true;
         this.btnCommand.setText("Wait for other player...");
