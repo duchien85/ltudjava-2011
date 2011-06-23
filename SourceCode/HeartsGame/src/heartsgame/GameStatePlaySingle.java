@@ -34,6 +34,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
     @Override
     public void Update(){
         if(playState == GameDef.GAME_PLAY_START){
+            btnCommand.setEnabled(false);
             divideCard();
 //            SendDataCardToClient();
             System.out.println("Switch to Game Exchange !!! ");
@@ -106,12 +107,15 @@ public class GameStatePlaySingle extends GameStatePlay  {
 
         FindFirstPlay();
         if (currentTurn != 0) {
+            // Computer di 2 chuon
             fourCard.add(com[currentTurn - 1].play2chuon());
             drawAllCard();
             try {
                 Thread.sleep(delay);
             } catch (Exception e) {
             }
+            have2chuon = false;
+            nextturn();
 //            is2bichplayed = true;
             nextturn();
         }
