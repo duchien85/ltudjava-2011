@@ -1,5 +1,6 @@
 package heartsgame;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -225,5 +226,23 @@ public class Player {
                 return true;
         }
         return false ;
+    }
+
+    public int playARandomCard() {
+        SecureRandom numGenerate = new SecureRandom();
+        int random = 0;
+        while (random == 0) {
+            random = numGenerate.nextInt(13);
+        }
+        return playACard(random);
+    }
+    
+    public int playfirst(boolean duocChonCo) 
+    {
+        return -1;
+    }
+    
+    public int playfollow(int c) {
+        return -1;
     }
 }

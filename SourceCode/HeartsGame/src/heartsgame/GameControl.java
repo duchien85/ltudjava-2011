@@ -78,6 +78,12 @@ public final class GameControl implements Runnable {
         setType(GameDef.IS_SERVER);
         setServer(new Server(portserver,this));
     }
+    
+    public void SinglePlay() {
+        gameState[GameDef.GAME_PLAY] = new GameStatePlaySingle(this,gui);       
+        setType(GameDef.IS_SINGLE);
+        SwitchState(GameDef.GAME_PLAY);
+    }
 
     /**
      * @return the type
