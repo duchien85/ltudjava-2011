@@ -37,7 +37,6 @@ public class GameStatePlay extends GameState {
     protected boolean duocChonCo = false;
     protected int roundcount = 0;
     protected int numGame = 1;
-   
 
     public GameStatePlay() {
     }
@@ -65,7 +64,7 @@ public class GameStatePlay extends GameState {
                 }
             }
         });
-        gui.container.add(btnCommand,0);
+        gui.container.add(btnCommand, 0);
 
         // tao notice o duoi
         note = new JLabel("This is the help !!!");
@@ -74,7 +73,7 @@ public class GameStatePlay extends GameState {
         pn.setBackground(Color.LIGHT_GRAY);
         pn.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
         pn.setBounds(0, 538, GameDef.WIDTH, 30);
-        gui.container.add(pn,1);
+        gui.container.add(pn, 1);
 
         // hien diem so
         Font f = new Font(Font.SANS_SERIF, Font.TRUETYPE_FONT, 20);
@@ -82,14 +81,14 @@ public class GameStatePlay extends GameState {
         for (int i = 0; i <= 3; i++) {
             score[i] = new JLabel();
             score[i].setFont(f);
-            gui.container.add(score[i],i+2);
+            gui.container.add(score[i], i + 2);
         }
-        
+
         score[3].setBounds(12, 50, 100, 30);
         score[2].setBounds(350, 6, 100, 30);
         score[1].setBounds(700, 500, 100, 30);
         score[0].setBounds(350, 360, 100, 30);
-        
+
         gui.repaint();
 
         playercard0 = new ArrayList<JLabel>();
@@ -122,16 +121,17 @@ public class GameStatePlay extends GameState {
         } else {
             disableButton();
         }
-    } 
+    }
 
     protected void nextturn() {
         currentTurn = (currentTurn + 1) % 4;
 
         System.out.println("Next turn : Wait for player " + (currentTurn + 1) + " play ....");
-        if (currentTurn != 0)
+        if (currentTurn != 0) {
             this.notice("Wait for player " + (currentTurn + 1) + " play ....");
-        else
+        } else {
             this.notice("Wait to you play ...");
+        }
 
     }
 
@@ -146,68 +146,80 @@ public class GameStatePlay extends GameState {
 
                     if (gameControl.getType() == GameDef.IS_SERVER) {
                         nextturn();
-                        SendDataCardToClient();                        
-                    } else
-                        SendDataCardToServer();
-                    
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                    }
-                } else {
-                    this.notice("Ban phai di 2 chuon dau tien !!!");
-                }
-            } else if (fourCard.isEmpty()) { // server di truoc
-                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount==0)) {
-                    this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
-                } else {
-                    if (cardClicked == GameDef.ISQBICH && (roundcount == 0)) {
-                        this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di dau tien");
+                        SendDataCardToClient();
                     } else {
-                        fourCard.add(player[0].playACard(cardClicked));
-                        drawAllCard();
-
-                        if (gameControl.getType() == GameDef.IS_SERVER) {
-                            nextturn();
-                            SendDataCardToClient();
-                        } else {
-                            SendDataCardToServer();
-                        }
                         
-                        try {
-                            Thread.sleep(100);
-                        } catch (Exception e) {
-                        }
                     }
+                } else if (gameControl.getType() == GameDef.IS_CLIENT) {
+                    SendDataCardToServer();
+                } else {
+                    nextturn();
                 }
-            } else if (fourCard.size() > 0) {// server di sau
-                
-                if (Card.dongChat(cardClicked,fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
-
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                }
+            } else {
+                this.notice("Ban phai di 2 chuon dau tien !!!");
+            }
+        } else if (fourCard.isEmpty()) { // server di truoc
+            if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount == 0)) {
+                this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
+            } else {
+                if (cardClicked == GameDef.ISQBICH && (roundcount == 0)) {
+                    this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di dau tien");
+                } else {
                     fourCard.add(player[0].playACard(cardClicked));
-
-                    if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
-                        duocChonCo = true;
-                    }
                     drawAllCard();
-                    
+
                     if (gameControl.getType() == GameDef.IS_SERVER) {
                         nextturn();
                         SendDataCardToClient();
-                    } else
-                        SendDataCardToServer();                    
+                    } else if (gameControl.getType() == GameDef.IS_CLIENT) {
+                        SendDataCardToServer();
+                    } else // GameDef.IS_SINGLE
+                    {
+                        nextturn();
+                    }
 
                     try {
                         Thread.sleep(100);
                     } catch (Exception e) {
                     }
-                } else {
-                    this.notice("Ban phai di cung chat voi la dau tien");
                 }
             }
+        } else if (fourCard.size() > 0) {// server di sau
+
+            if (Card.dongChat(cardClicked, fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
+
+                fourCard.add(player[0].playACard(cardClicked));
+
+                if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
+                    duocChonCo = true;
+                }
+                drawAllCard();
+
+                if (gameControl.getType() == GameDef.IS_SERVER) {
+                    nextturn();
+                    SendDataCardToClient();
+                } else {
+                    SendDataCardToServer();
+                }
+            } else if (gameControl.getType() == GameDef.IS_CLIENT) {
+                SendDataCardToServer();
+            } else {
+                nextturn();
+            }
+
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+            }
+        } else {
+            this.notice("Ban phai di cung chat voi la dau tien");
         }
     }
-    
+
     protected void ChangeCard(String mess) {
         // reset lai cac quan bai
         for (int n = 0; n < 4; n++) {
@@ -367,7 +379,7 @@ public class GameStatePlay extends GameState {
     protected void clear4play() {
         while (gui.container.getComponentCount() > 6) {
             gui.container.remove(gui.container.getComponentCount()-1);
-        }        
+        }
     }
 
     protected void DrawUpdateCard(int index) {
@@ -428,8 +440,15 @@ public class GameStatePlay extends GameState {
             for (int i = 0; i < 3; i++) {
                 data += "c";
                 data += player[0].getThreeCard().get(i);
+
+
+
             }
             gameControl.getClient().SendToServer(data);
+        } else if (gameControl.getType() == GameDef.IS_SINGLE) {
+            
+            DoExchange();
+            
         }
     }
 
@@ -572,6 +591,10 @@ public class GameStatePlay extends GameState {
             fourData += fourCard.get(i);
         }
         gameControl.getClient().SendToServer(fourData);
+    }
+    
+    protected void DoExchange() {    
+    
     }
 
     private void newRound() {
