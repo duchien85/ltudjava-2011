@@ -147,8 +147,6 @@ public class GameStatePlay extends GameState {
                     if (gameControl.getType() == GameDef.IS_SERVER) {
                         nextturn();
                         SendDataCardToClient();
-                    } else {
-                        
                     }
                 } else if (gameControl.getType() == GameDef.IS_CLIENT) {
                     SendDataCardToServer();
@@ -202,8 +200,6 @@ public class GameStatePlay extends GameState {
                 if (gameControl.getType() == GameDef.IS_SERVER) {
                     nextturn();
                     SendDataCardToClient();
-                } else {
-                    SendDataCardToServer();
                 }
             } else if (gameControl.getType() == GameDef.IS_CLIENT) {
                 SendDataCardToServer();
