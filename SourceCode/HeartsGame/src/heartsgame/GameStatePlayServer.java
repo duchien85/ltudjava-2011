@@ -5,6 +5,7 @@
 
 package heartsgame;
 
+import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -54,7 +55,6 @@ public class GameStatePlayServer extends GameStatePlay {
                 }
             }
         }
-
         else if(playState == GameDef.GAME_PLAY_PLAYING){
             if (currentTurn == 0 && cardClicked!=-1){
                 ReceiveCardPlay();
@@ -70,11 +70,41 @@ public class GameStatePlayServer extends GameStatePlay {
     }
     private boolean CheckExchange() {
         if (endExchange && gameControl.getServer().IsExchanged()) {
-            ArrayList<Integer> card0 = player[0].getThreeCard();
-            ArrayList<Integer> card1 = gameControl.getServer().getCardExchange(0);
-            ArrayList<Integer> card2 = gameControl.getServer().getCardExchange(1);
-            ArrayList<Integer> card3 = gameControl.getServer().getCardExchange(2);      
+            Integer[][] _card = new Integer[4][];
+            for(int i=0; i<4;i++)
+                _card[i]= new Integer[13];
+            player[0].getThreeCard().toArray(_card[0]);
+            gameControl.getServer().getCardExchange(0).toArray(_card[1]);
+            gameControl.getServer().getCardExchange(1).toArray(_card[2]);
+            gameControl.getServer().getCardExchange(2).toArray(_card[3]);
 
+            int num = numGame%4;
+            if ((num)>0){
+                switch(num){
+                    case 1:
+                        for (int i=0; i<4;i++){
+                            for(int j=0; j<3; j++)
+                                player[(i+1)%4].receiveCard(player[i].playACard(_card[i][j]));
+                        }
+                        break;
+                    case 2:
+                        for (int i=0; i<4;i++){
+                            for(int j=0; j<3; j++)
+                                player[(i+2)%4].receiveCard(player[i].playACard(_card[i][j]));
+                        }
+                        break;
+                    case 3:
+                        for (int i=0; i<4;i++){
+                            for(int j=0; j<3; j++)
+                                player[i].receiveCard(player[(i+1)%4].playACard(_card[(i+1)%4][j]));
+                        }
+                        break;
+                }
+            }
+
+            for(int i=0; i<4;i++)
+                player[i].sort();
+            
             SendDataCardToClient();
             btnCommand.setText("play card");
             disableButton();
