@@ -255,6 +255,7 @@ public class Player {
                 random = 0;
             else
                 random = numGenerate.nextInt(getListCard().size() - 1);
+            System.out.println("Random: " + random + "; Listcard at random:" + getListCard().get(random));
         }
         return playACard(getListCard().get(random));
     }
