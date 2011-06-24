@@ -17,9 +17,9 @@ public class GameStatePlaySingle extends GameStatePlay  {
         
         player = new Player[4];
         player[0] = new Player("You");
-        player[1] = new Computer();
-        player[2] = new Computer();
-        player[3] = new Computer();
+        player[1] = new Player("Player 2");
+        player[2] = new Player("Player 3");
+        player[3] = new Player("Player 4");
         com1 = player[1];
         com2 = player[2];
         com3 = player[3];
@@ -67,7 +67,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
         computerPlay();
     }
     
-    private void checkEnd4Card() {
+    private boolean checkEnd4Card() {
         if (fourCard.size() == 4) {
             System.out.println("Checking end 4 card ...");
             int winCard = check4cardwin();
@@ -95,8 +95,12 @@ public class GameStatePlaySingle extends GameStatePlay  {
             drawAllCard();
             if (roundcount == 13) {
                 processEndRound();
+                showbutton("New round");
             }
+            
+            return true;
         }
+        return false;
     }
 
 
@@ -108,7 +112,10 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 fourCard.add(player[currentTurn].playfirst(duocChonCo));
             } else {
                 fourCard.add(player[currentTurn].playfollow(fourCard.get(0)));
-                if (Card.getType(fourCard.get(fourCard.size() - 1)) == GameDef.CHAT_CO) {
+                
+                // Neu nguoi choi di dau tien di quan ko phai la quan Co, ma nhung nguoi sau do lai di quan co (do bai nguoi do da het nuoc)
+                if (Card.getType(fourCard.get(0)) != GameDef.CHAT_CO
+                        && Card.getType(fourCard.get(fourCard.size() - 1)) == GameDef.CHAT_CO) {
                     duocChonCo = true;
                 }
             }
@@ -117,7 +124,8 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 Thread.sleep(delay);
             } catch (Exception e) {
             }
-            checkEnd4Card();
+           if (!checkEnd4Card())
+               nextturn();
            
         }
     }
