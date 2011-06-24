@@ -89,6 +89,24 @@ public class GameStatePlay extends GameState {
         score[2].setBounds(350, 6, 100, 30);
         score[1].setBounds(700, 500, 100, 30);
         score[0].setBounds(350, 360, 100, 30);
+        
+//       
+//        JCheckBox cbBackground = new JCheckBox("Background", true);
+//        cbBackground.setBounds(gui.container.getX() + 10, gui.container.getY() + 20,
+//                100, 20);
+//        
+//        URL path2 = getClass().getResource("52card/1169_Nature.jpg");
+//        final JLabel bgr = new JLabel(new ImageIcon(path2));
+//        bgr.setBounds(gui.container.getX(), gui.container.getX(), gui.container.getWidth(), gui.container.getHeight());
+//        gui.container.add(bgr);
+//        cbBackground.addActionListener(new ActionListener() {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                bgr.setIcon(null);
+//                //gui.repaint();
+//            }
+//        });
+//        gui.container.add(cbBackground, 0);
 
         gui.repaint();
 
@@ -162,11 +180,11 @@ public class GameStatePlay extends GameState {
                 }
             }
         else if (fourCard.isEmpty()) { // server di truoc
-            if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (roundcount == 0)) {
-                this.notice("Ban khong duoc phep chon quan Co trong nuoc di dau tien");
+            if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (!duocChonCo)) {
+                this.notice("Ban khong duoc phep chon quan Co trong nuoc di nay (Heart haven't broken yet)");
             } else {
-                if (cardClicked == GameDef.ISQBICH && (roundcount == 0)) {
-                    this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di dau tien");
+                if (cardClicked == GameDef.ISQBICH && (!duocChonCo)) {
+                    this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di nay (Heart haven't broken yet)");
                 } else {
                     fourCard.add(player[0].playACard(cardClicked));
                     drawAllCard();
@@ -195,6 +213,8 @@ public class GameStatePlay extends GameState {
 
                 if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
                     duocChonCo = true;
+                    this.notice("Heart broken!!!!!");
+                    System.out.println("Heart broken!!!!!");
                 }
                 drawAllCard();
 
@@ -271,11 +291,12 @@ public class GameStatePlay extends GameState {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
         URL path;
+        
         for (int i = 0; i < _player.getListCard().size(); i++) {
             if (showcard == true) {
                 path = getClass().getResource("52card/" +_player.getIDCardAt(i) + ".jpg");
             } else {
-                path = getClass().getResource("52card/0-2.jpg");
+                path = getClass().getResource("52card/0-1.jpg");
             }
             im = new ImageIcon(path);
             kq.add(new JLabel(im));
