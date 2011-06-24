@@ -110,6 +110,8 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 if (Card.getType(fourCard.get(0)) != GameDef.CHAT_CO
                         && Card.getType(fourCard.get(fourCard.size() - 1)) == GameDef.CHAT_CO) {
                     duocChonCo = true;
+                    this.notice("Heart broken!!!!!");
+                    System.out.println("Heart broken!!!!!");
                 }
             }
             drawAllCard();
