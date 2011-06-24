@@ -4,9 +4,8 @@
  */
 package heartsgame;
 
-import java.awt.Color;
-import java.awt.Rectangle;
 import java.awt.event.*;
+import java.net.URL;
 import javax.swing.*;
 
 /**
@@ -25,7 +24,8 @@ public class GameStateMenu extends GameState {
     @Override
     public void Enter(){
         gui.container.removeAll();
-        JLabel bg= new JLabel(new ImageIcon("52card\\bg.jpg"));
+        URL path = getClass().getResource("52card/bg.jpg");
+        JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
 /*

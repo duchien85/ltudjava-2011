@@ -7,6 +7,7 @@ package heartsgame;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
+import java.net.URL;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.ImageIcon;
@@ -269,12 +270,12 @@ public class GameStatePlay extends GameState {
     private ArrayList<JLabel> loadCard(Player _player, boolean showcard) {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
-        String path;
+        URL path;
         for (int i = 0; i < _player.getListCard().size(); i++) {
             if (showcard == true) {
-                path = "52card\\" + _player.getIDCardAt(i) + ".jpg";
+                path = getClass().getResource("52card/" +_player.getIDCardAt(i) + ".jpg");
             } else {
-                path = "52card\\0-2.jpg";
+                path = getClass().getResource("52card/0-2.jpg");
             }
             im = new ImageIcon(path);
             kq.add(new JLabel(im));
@@ -308,9 +309,9 @@ public class GameStatePlay extends GameState {
     private ArrayList<JLabel> loadCard(ArrayList<Integer> fourcard) {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
-        String path;
+        URL path;
         for (int i = 0; i < fourcard.size(); i++) {
-            path = "52card\\" + fourcard.get(i) + ".jpg";
+            path = getClass().getResource("52card/" + fourcard.get(i) + ".jpg");
             im = new ImageIcon(path);
             kq.add(new JLabel(im));
         }
