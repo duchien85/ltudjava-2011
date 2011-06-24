@@ -232,9 +232,16 @@ public class Player {
         SecureRandom numGenerate = new SecureRandom();
         int random = 0;
         while (random == 0) {
-            random = numGenerate.nextInt(13);
+            if (!dsBai.isEmpty()) {
+                if (dsBai.size() == 1) {
+                    random = 0;
+                } else {
+                    random = numGenerate.nextInt(dsBai.isEmpty() ? 0 : dsBai.size() - 1);
+                }
+            }
+
         }
-        return playACard(random);
+        return playACard(dsBai.get(random));
     }
     
     public int playfirst(boolean duocChonCo) 
@@ -243,7 +250,9 @@ public class Player {
         int random = 0;
 
         while ((getListCard().get(random) == 41) || (Card.getType(getListCard().get(random)) == GameDef.CHAT_CO && (!duocChonCo))) {
-            random = numGenerate.nextInt(getListCard().size());
+            if (getListCard().size() == 1) random = 0;
+            else
+            random = numGenerate.nextInt(getListCard().size() - 1);
         }
         return playACard(getListCard().get(random));
     }
@@ -253,12 +262,17 @@ public class Player {
         for (int i = 0; i < getListCard().size(); ++i)
         {
             if (Card.dongChat(id, getListCard().get(i)))
-                samerank.add(i);
+                samerank.add(getListCard().get(i));
         }
         if (!samerank.isEmpty()) {
             SecureRandom numGenerate = new SecureRandom();
             int random = 0;
-            random = numGenerate.nextInt(samerank.size());            
+            int size = samerank.size();
+            if (size == 1) {
+                random = 0;
+            } else {
+                random = numGenerate.nextInt(samerank.size() - 1);
+            }
             return playACard(samerank.get(random));
         } else {
             return playfirst(true);
