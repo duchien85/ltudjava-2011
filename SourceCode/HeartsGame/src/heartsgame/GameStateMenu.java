@@ -4,6 +4,7 @@
  */
 package heartsgame;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.event.*;
 import javax.swing.*;
@@ -77,7 +78,9 @@ public class GameStateMenu extends GameState {
         gui.container.add(btnConnect,0);
 
          // them button Single player
+
         JButton btnSinglePlayer = new JButton("VS Computer");
+
         btnSinglePlayer.setBounds(330, 260, 150, 20);
         btnSinglePlayer.addActionListener(new ActionListener() {
 
@@ -86,7 +89,9 @@ public class GameStateMenu extends GameState {
                 gameControl.SinglePlay();
             }
         });
+
         gui.container.add(btnSinglePlayer,0);
+
         
         // them button About
         JButton btnAbout = new JButton("About");

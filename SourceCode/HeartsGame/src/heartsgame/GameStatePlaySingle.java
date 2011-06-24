@@ -59,7 +59,72 @@ public class GameStatePlaySingle extends GameStatePlay  {
 
         }
     }
+  
+    @Override
+  public void ReceiveCardPlay() {
+        super.ReceiveCardPlay();        
+        computerPlay();
+    }
     
+ private void checkEnd4Card() {        
+        if (fourCard.size() == 4) {
+            System.out.println("Checking end 4 card ...");
+            int winCard = check4cardwin();
+            for (int i=0; i< 4; i++){
+                if(fourCard.get(i)==winCard){                    
+                    firstturn = (firstturn+i)%4;
+                    player[firstturn].add4scorecard(fourCard);
+                    updateScore();
+                    
+                    String score = "";
+                    for(int index=0; index<4;index++){
+                        score+="score" + player[index].getScore();
+                    }
+                   
+
+                    currentTurn = firstturn;
+                    if (firstturn==0)
+                        this.notice("Wait for you play ...");
+                    else
+                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
+                    break;
+                }
+            }
+            roundcount++;
+            fourCard.clear();
+           // gameControl.getServer().SendToAllClient("turn"+firstturn);
+            drawAllCard();
+            if (roundcount == 13) {
+                processEndRound();
+             //   gameControl.getServer().SendToAllClient("endround");
+            }
+        }
+    }
+
+
+ 
+
+    public void computerPlay() {
+        while ((currentTurn != 0) && (playState == GameDef.GAME_PLAY_PLAYING)) {
+            if (currentTurn == firstturn) {
+                fourCard.add(com[currentTurn - 1].playfirst(duocChonCo));
+            } else {
+                fourCard.add(com[currentTurn - 1].playfollow(fourCard.get(0)));
+                if (Card.getType(fourCard.get(fourCard.size() - 1)) == GameDef.CHAT_CO) {
+                    duocChonCo = true;
+                }
+            }
+            drawAllCard();
+            try {
+                Thread.sleep(delay);
+            } catch (Exception e) {
+            }
+            nextturn();
+           
+        }
+    }
+    
+      
        @Override
     protected void ReceiveExchange() {
         if (cardClicked != -1) { // click vao 1 la bai
@@ -116,8 +181,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
             }
             bChuaDi2chuon = false;
             nextturn();
-//            is2bichplayed = true;
-            nextturn();
+
         }
         drawAllCard();
         btnCommand.setVisible(false);
@@ -125,69 +189,6 @@ public class GameStatePlaySingle extends GameStatePlay  {
         computerPlay();
     }
 
-    @Override
-  public void ReceiveCardPlay() {
-        super.ReceiveCardPlay();        
-        computerPlay();
-    }
-    
- private void checkEnd4Card() {        
-        if (fourCard.size() == 4) {
-            System.out.println("Checking end 4 card ...");
-            int winCard = check4cardwin();
-            for (int i=0; i< 4; i++){
-                if(fourCard.get(i)==winCard){                    
-                    firstturn = (firstturn+i)%4;
-                    player[firstturn].add4scorecard(fourCard);
-                    updateScore();
-                    
-                    String score = "";
-                    for(int index=0; index<4;index++){
-                        score+="score" + player[index].getScore();
-                    }
-                   
-
-                    currentTurn = firstturn;
-                    if (firstturn==0)
-                        this.notice("Wait for you play ...");
-                    else
-                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
-                    break;
-                }
-            }
-            roundcount++;
-            fourCard.clear();
-           // gameControl.getServer().SendToAllClient("turn"+firstturn);
-            drawAllCard();
-            if (roundcount == 13) {
-                processEndRound();
-             //   gameControl.getServer().SendToAllClient("endround");
-            }
-        }
-    }
-
-
- 
-
-    public void computerPlay() {
-        while ((currentTurn != 0) && (playState == GameDef.GAME_PLAY_PLAYING)) {
-            if (currentTurn == firstturn) {
-                fourCard.add(com[currentTurn - 1].playfirst(duocChonCo));
-            } else {
-                fourCard.add(com[currentTurn - 1].playfollow(fourCard.get(0)));
-                if (Card.getType(fourCard.get(fourCard.size() - 1)) == GameDef.CHAT_CO){
-                    duocChonCo = true;
-                }
-            }
-            drawAllCard();
-            try {
-                Thread.sleep(delay);
-            } catch (Exception e) {
-            }
-            nextturn();
-           
-        }
-    }
 
     private void divideCard() {
         // khoi tao mang cac quan bai gia tri ban dau la 0
