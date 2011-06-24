@@ -33,10 +33,6 @@ public class Game_IPCLIENT extends GameState {
         JLabel ip = new JLabel("IP: ");
         ip.setBounds(310, 200, 50, 20);
 
-        JLabel port = new JLabel("Port:");
-
-        port.setBounds(310, 215, 50, 50);
-
         final JTextField textip = new JTextField();
 
 
@@ -44,7 +40,6 @@ public class Game_IPCLIENT extends GameState {
         textip.setBounds(350, 200, 150, 20);      
 
         gui.container.add(ip,0);
-        gui.container.add(port,0);
         gui.container.add(textip,0);
 
         JButton btnConnect = new JButton("Connect...");
