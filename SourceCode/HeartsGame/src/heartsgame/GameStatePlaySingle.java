@@ -118,6 +118,9 @@ public class GameStatePlaySingle extends GameStatePlay  {
            if (!checkEnd4Card())
                nextturn();
            
+           if (player[currentTurn].getListCard().isEmpty())
+               break;
+           
         }
     }
     
