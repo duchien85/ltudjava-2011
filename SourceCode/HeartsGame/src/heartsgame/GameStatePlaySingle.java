@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class GameStatePlaySingle extends GameStatePlay  {
     
-    private Player com1, com2, com3;
-    private Player[] com;
     private ArrayList<Integer> threeCard;
 //    private int[] SignalFlag; 
     private int delay = 100;
@@ -20,10 +18,6 @@ public class GameStatePlaySingle extends GameStatePlay  {
         player[1] = new Player("Player 2");
         player[2] = new Player("Player 3");
         player[3] = new Player("Player 4");
-        com1 = player[1];
-        com2 = player[2];
-        com3 = player[3];
-        com = new Player[] {com1, com2, com3};
         fourCard = new ArrayList<Integer>();
         this.gameControl = gControl;
         this.gui = g;
@@ -76,11 +70,6 @@ public class GameStatePlaySingle extends GameStatePlay  {
                     firstturn = (firstturn + i) % 4;
                     player[firstturn].add4scorecard(fourCard);
                     updateScore();
-
-                    String score = "";
-                    for (int index = 0; index < 4; index++) {
-                        score += "score" + player[index].getScore();
-                    }
                     currentTurn = firstturn;
                     if (firstturn == 0) {
                         this.notice("Wait for you play ...");
@@ -95,7 +84,9 @@ public class GameStatePlaySingle extends GameStatePlay  {
             drawAllCard();
             if (roundcount == 13) {
                 processEndRound();
-                showbutton("New round");
+                btnCommand.setVisible(true);
+                btnCommand.setEnabled(true);
+                btnCommand.setText("Exchange");
             }
             
             return true;
@@ -179,7 +170,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
         FindFirstPlay();
         if (currentTurn != 0) {
             // Computer di 2 chuon
-            fourCard.add(com[currentTurn - 1].play2chuon());
+            fourCard.add(player[currentTurn].play2chuon());
             drawAllCard();
             try {
                 Thread.sleep(delay);
@@ -237,15 +228,11 @@ public class GameStatePlaySingle extends GameStatePlay  {
 
 
     public void newRound() {
-        player[0].newRound();
-        for (int i = 0; i <= 2; i++) {
-            com[i].newRound();
-        }
+        for(int i = 0; i < 4; ++i)
+            player[i].newRound();
         divideCard();
-        player[0].sort();
-        for (int i = 0; i <= 2; i++) {
-            com[i].sort();
-        }
+        for(int i = 0; i < 4; ++i)
+            player[i].sort();
 //        is2bichplayed = false;
         duocChonCo = false;
 //        currentstep = 1;
@@ -255,10 +242,8 @@ public class GameStatePlaySingle extends GameStatePlay  {
     }
 
     public void newGame() {
-        player[0].resetScore();
-        com1.resetScore();
-        com2.resetScore();
-        com3.resetScore();
+        for (int i = 0 ; i < 4; ++i)
+            player[i].resetScore();;
         fourCard.clear();
         newRound();
     }
