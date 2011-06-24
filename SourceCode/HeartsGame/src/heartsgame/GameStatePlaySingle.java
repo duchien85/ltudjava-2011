@@ -87,6 +87,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 btnCommand.setVisible(true);
                 btnCommand.setEnabled(true);
                 btnCommand.setText("Exchange");
+                roundcount = 0;
             }
             
             return true;
@@ -100,6 +101,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
     public void computerPlay() {
         while ((currentTurn != 0) && (playState == GameDef.GAME_PLAY_PLAYING)) {
             if (currentTurn == firstturn) {
+                System.out.println("Player[" + currentTurn +"] dsBai: " + player[currentTurn].getListCard());
                 fourCard.add(player[currentTurn].playfirst(duocChonCo));
             } else {
                 fourCard.add(player[currentTurn].playfollow(fourCard.get(0)));
@@ -117,7 +119,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
             }
            if (!checkEnd4Card())
                nextturn();
-           
+           System.out.println("Current turn: " + currentTurn + "; Player[" + currentTurn +"] dsBai = " + player[currentTurn].getListCard().size());
            if (player[currentTurn].getListCard().isEmpty())
                break;
            
