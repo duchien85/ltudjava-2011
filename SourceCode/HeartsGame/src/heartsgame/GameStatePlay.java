@@ -206,6 +206,8 @@ public class GameStatePlay extends GameState {
                     nextturn();
                 }
             }
+            else
+                this.notice("Ban phai di cung nuoc.");
 
             try {
                 Thread.sleep(100);
