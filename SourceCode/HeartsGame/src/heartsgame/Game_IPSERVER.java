@@ -9,6 +9,7 @@ import java.awt.event.*;
 
 
 import java.io.*;
+import java.net.URL;
 import javax.swing.*;
 
 /**
@@ -27,7 +28,9 @@ public class Game_IPSERVER extends GameState {
     {
         gui.container.removeAll();
 
-        JLabel bg= new JLabel(new ImageIcon("52card\\bg.jpg"));
+        URL path = getClass().getResource("52card/bg.jpg");
+        JLabel bg= new JLabel(new ImageIcon(path));
+        
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);      
 
