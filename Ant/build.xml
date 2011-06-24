@@ -1,6 +1,6 @@
 <project name="GameHeart" basedir="." default="main">
 
-    <property name="src.dir"     value="src"/>
+    <property name="src.dir"     value="../SourceCode/HeartsGame/src"/>
 
     <property name="build.dir"   value="build"/>
     <property name="classes.dir" value="${build.dir}/classes"/>
@@ -8,9 +8,10 @@
 
     <property name="main-class"  value="heartsgame.GameControl"/>
 
+   
 
 
-    <target name="clean">
+  <target name="clean">
         <delete dir="${build.dir}"/>
     </target>
 
@@ -31,6 +32,13 @@
         </jar>
     </target>
 
+
+  <target name="dist-with-manifest" depends="compile" description="make the distribution" >
+    <jar destfile="${jarfile.path}" index="true" manifest="META-INF/MANIFEST.MF">
+      <fileset dir="${build.dir}/classes"/>
+    </jar>
+  </target>
+  
     <target name="run" depends="jar">
         <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
     </target>
