@@ -40,4 +40,6 @@ public class GameDef {
     static int CHAT_BICH    = 1;
     static int CHAT_CHUON   = 2;
     static int CHAT_RO      = 3;
+    
+    static int DEFAULT_PORT = 9000;
 }

@@ -41,16 +41,11 @@ public class Game_IPCLIENT extends GameState {
 
 
         textip.setText("127.0.0.1");
-        textip.setBounds(350, 200, 150, 20);
-
-        final JTextField textport = new JTextField();
-
-        textport.setBounds(350, 230, 150, 20);
+        textip.setBounds(350, 200, 150, 20);      
 
         gui.container.add(ip,0);
         gui.container.add(port,0);
         gui.container.add(textip,0);
-        gui.container.add(textport,0);
 
         JButton btnConnect = new JButton("Connect...");
 
@@ -67,20 +62,13 @@ public class Game_IPCLIENT extends GameState {
                 if (textip.getText() == null || (textip.getText() == null ? "" == null : textip.getText().equals(""))) {
                     jop.showMessageDialog(jop, "Vui Lòng Nhập Địa Chỉ IP");
                 } else {
-                    if (textport.getText() == null || (textport.getText() == null ? "" == null : textport.getText().equals(""))) {
-                        jop.showMessageDialog(jop, "Vui Lòng Nhập Vào Port");
-                    } else {
-                        final String Ip = textip.getText();
-
-                        final int portclient = Integer.parseInt(textport.getText());
-                        gameControl.SwitchState(GameDef.GAME_WAIT);
-                        gameControl.IsClient(Ip, portclient);
-                    }
+                    final String Ip = textip.getText();
+                    final int portclient = GameDef.DEFAULT_PORT;
+                    gameControl.SwitchState(GameDef.GAME_WAIT);
+                    gameControl.IsClient(Ip, portclient);                    
                 }
             }
         });
-
-        //gui.container.add(jop,0);
 
         // them button Back to Menu
         JButton btnAbout = new JButton("Back to Menu");

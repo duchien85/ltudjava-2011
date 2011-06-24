@@ -55,7 +55,7 @@ public class GameStateMenu extends GameState {
         gui.container.add(ng,0);
 */
         // them button New Game
-        JButton btnNewGame = new JButton("New Game");
+        JButton btnNewGame = new JButton("Create Game");
         btnNewGame.setBounds(330, 200, 150, 20);
         btnNewGame.addActionListener(new ActionListener() {
 
@@ -66,7 +66,7 @@ public class GameStateMenu extends GameState {
         gui.container.add(btnNewGame,0);
 
         // them button Connect to Game
-        JButton btnConnect = new JButton("Connect to Game");
+        JButton btnConnect = new JButton("Join to Game");
         btnConnect.setBounds(330, 230, 150, 20);
         btnConnect.addActionListener(new ActionListener() {
 
@@ -77,7 +77,7 @@ public class GameStateMenu extends GameState {
         gui.container.add(btnConnect,0);
 
          // them button Single player
-        JButton btnSinglePlayer = new JButton("Single Player");
+        JButton btnSinglePlayer = new JButton("VS Computer");
         btnSinglePlayer.setBounds(330, 260, 150, 20);
         btnSinglePlayer.addActionListener(new ActionListener() {
 
@@ -86,7 +86,7 @@ public class GameStateMenu extends GameState {
                 gameControl.SinglePlay();
             }
         });
-        gui.container.add(btnSinglePlayer);
+        gui.container.add(btnSinglePlayer,0);
         
         // them button About
         JButton btnAbout = new JButton("About");
