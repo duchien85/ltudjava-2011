@@ -249,7 +249,8 @@ public class Player {
           SecureRandom numGenerate = new SecureRandom();
         int random = 0;
 
-        while ((getListCard().get(random) == 41) || (Card.getType(getListCard().get(random)) == GameDef.CHAT_CO && (!duocChonCo))) {
+        // 41 : Q bich
+        while (((getListCard().get(random) == 41) || Card.getType(getListCard().get(random)) == GameDef.CHAT_CO) && (!duocChonCo)) {
             if (getListCard().size() == 1)
                 random = 0;
             else
