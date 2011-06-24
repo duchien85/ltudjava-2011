@@ -29,62 +29,24 @@ public class Game_IPSERVER extends GameState {
 
         JLabel bg= new JLabel(new ImageIcon("52card\\bg.jpg"));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
-        gui.container.add(bg);
-
-        JLabel JL_PortServer = new JLabel("Port:");
-        JL_PortServer.setBounds(310, 215, 50, 50);
-
-        final JTextField JTFPortServer = new JTextField();
-
-        JTFPortServer.setBounds(350, 230, 150, 20);
-
-        JButton JBT_Listen = new JButton("Listen");
-
-        gui.container.add(JL_PortServer,0);
-
-        gui.container.add(JTFPortServer,0);
-
-        JBT_Listen.setBounds(400, 260, 100, 20);
-
-        final JOptionPane jop = new JOptionPane("Thông Báo");
-
-        jop.setBounds(300, 300, 300, 300);     
-
-        JBT_Listen.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent e) {
-
-                if(  JTFPortServer.getText() == null || (JTFPortServer.getText() == null ? "" == null : JTFPortServer.getText().equals("")))
-                {
-                    jop.showMessageDialog(jop, "Vui Lòng Nhập Vào Port");
-                }
-                else
-                {
-                    int portserver = Integer.parseInt(JTFPortServer.getText());
-                    gameControl.IsServer(portserver);
-                    gameControl.SwitchState(GameDef.GAME_WAIT);
-                    
-                }
-            }
-        });
-        //gui.container.add(jop,0);
+        gui.container.add(bg);      
 
          // them button Back to Menu
-        JButton btnAbout = new JButton("Back to Menu");
-        btnAbout.setBounds(350, 300, 150, 20);
-        btnAbout.addActionListener(new ActionListener() {
-
+        JButton btnBack = new JButton("Back to Menu");
+        btnBack.setBounds(350, 300, 150, 20);
+        btnBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameControl.SwitchState(GameDef.GAME_MENU);
             }
         });
-        gui.container.add(btnAbout,0);
-        
-        gui.container.add(JBT_Listen,0);
-
+        gui.container.add(btnBack,0);
         gui.repaint();
 
+        Connect();
     }
 
-
+    private void Connect(){
+        gameControl.IsServer(GameDef.DEFAULT_PORT);
+        gameControl.SwitchState(GameDef.GAME_WAIT);
+    }
 }

@@ -44,7 +44,7 @@ public class GameStateWait extends GameState {
         gui.container.add(bg);
 
         // them button New Game
-        JButton btnWait = new JButton("Waiting ... ");
+        JButton btnWait = new JButton("Waiting other player ...");
         btnWait.setBounds(330, 200, 150, 20);
         btnWait.setEnabled(false);
         btnWait.addActionListener(new ActionListener() {
