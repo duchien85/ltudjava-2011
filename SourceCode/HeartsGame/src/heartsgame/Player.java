@@ -250,9 +250,10 @@ public class Player {
         int random = 0;
 
         while ((getListCard().get(random) == 41) || (Card.getType(getListCard().get(random)) == GameDef.CHAT_CO && (!duocChonCo))) {
-            if (getListCard().size() == 1) random = 0;
+            if (getListCard().size() == 1)
+                random = 0;
             else
-            random = numGenerate.nextInt(getListCard().size() - 1);
+                random = numGenerate.nextInt(getListCard().size() - 1);
         }
         return playACard(getListCard().get(random));
     }
