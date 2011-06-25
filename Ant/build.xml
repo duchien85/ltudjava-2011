@@ -21,11 +21,16 @@
 
      </target>
 
+  <target name="zipResource">
+    <zip destfile="${jar.dir}/${ant.project.name}.jar">      
+      <zipfileset dir="${src.dir}/heartsgame/52card" includes="**/*.*" prefix="heartsgame/52card"/>
+    </zip>
+  </target>
      
 
-    <target name="jar" depends="compile">
+    <target name="jar" depends="compile,zipResource">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" update="true">
             <manifest>
                 <attribute name="Main-class" value="${main-class}"/>
             </manifest>
