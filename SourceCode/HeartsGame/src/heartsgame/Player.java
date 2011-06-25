@@ -187,6 +187,21 @@ public class Player {
     public ArrayList<Integer> getThreeCard() {
         return threeCard;
     }
+    
+    // Lay ra 3 quan bai da duoc chon de exchange
+    public GameStatePlaySingle.ThreeCard  playThreeCard() {
+        GameStatePlaySingle.ThreeCard _3card2 = null;
+        if (!threeCard.isEmpty()){
+            _3card2 = new GameStatePlaySingle.ThreeCard(
+                   this.playACard(threeCard.get(0)),
+                    this.playACard(threeCard.get(1)),
+                    this.playACard(threeCard.get(2)));
+            
+                
+        }
+        
+        return _3card2;
+    }
 
     /**
      * @param threeCard the threeCard to set

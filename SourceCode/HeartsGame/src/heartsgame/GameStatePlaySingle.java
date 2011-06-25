@@ -5,10 +5,69 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 
 public class GameStatePlaySingle extends GameStatePlay  {
+
+    public static class ThreeCard {
+        private int c1;
+        private int c2;
+        private int c3;
+
+        public ThreeCard() {
+            c1 = c2 = c3 = -1;
+        }
+
+        public ThreeCard(int playARandomCard, int playARandomCard0, int playARandomCard1) {
+            c1 = playARandomCard;
+            c2 = playARandomCard0;
+            c3 = playARandomCard1;
+        }
+
+        /**
+         * @return the c1
+         */
+        public int getC1() {
+            return c1;
+        }
+
+        /**
+         * @param c1 the c1 to set
+         */
+        public void setC1(int c1) {
+            this.c1 = c1;
+        }
+
+        /**
+         * @return the c2
+         */
+        public int getC2() {
+            return c2;
+        }
+
+        /**
+         * @param c2 the c2 to set
+         */
+        public void setC2(int c2) {
+            this.c2 = c2;
+        }
+
+        /**
+         * @return the c3
+         */
+        public int getC3() {
+            return c3;
+        }
+
+        /**
+         * @param c3 the c3 to set
+         */
+        public void setC3(int c3) {
+            this.c3 = c3;
+        }
+    }
     
     private ArrayList<Integer> threeCard;
 //    private int[] SignalFlag; 
     private int delay = 100;
+    private ArrayList<ThreeCard> lstThreeCards;
 
     public GameStatePlaySingle(GameControl gControl, GUI g){
         
@@ -32,7 +91,10 @@ public class GameStatePlaySingle extends GameStatePlay  {
             divideCard();
 //            SendDataCardToClient();
             System.out.println("Switch to Game Exchange !!! ");
-            playState = GameDef.GAME_PLAY_EXCHANGE;
+            if (roundcount % 4 != 1)
+                playState = GameDef.GAME_PLAY_EXCHANGE;
+            else
+                endExchange = true;
         }
 
         else if(playState == GameDef.GAME_PLAY_EXCHANGE){
@@ -163,22 +225,99 @@ public class GameStatePlaySingle extends GameStatePlay  {
     @Override
     // Hoan doi bai
     protected void DoExchange() {
+        if ((roundcount % 4) != 3) { // Neu khong phai round thu 4 thi bat dau doi bai
+            threeCard = player[0].getThreeCard();
+//            int card1, card2;
+//            for (int i = 0; i <= 2; i++) {
+//                card1 = player[0].playACard(threeCard.get(i));
+//                card2 = player[i + 1].playARandomCard();
+//                player[0].receiveCard(card2);
+//                player[i + 1].receiveCard(card1);
+//            }
+            
+            // Luu mot mang cacs phan tu ThreeCard (1 ThreeCard se chua 3 la bai) cua computer1, com2, com3
+            // Index 0: player[0]
+            // Index 1: player[1]
+            // Index 2: player[2]
+            // Index 2: player[3]
+            
+            lstThreeCards = new ArrayList<ThreeCard>();
+            lstThreeCards.add(player[0].playThreeCard());
+            for (int i = 1; i < 4; ++i) {
+                // Tao doi tuong chua 3 la bai 
+                ThreeCard _3cards = new ThreeCard(player[i].playARandomCard(), player[i].playARandomCard(), player[i].playARandomCard());
+                lstThreeCards.add(_3cards);
+            }
 
-        threeCard = player[0].getThreeCard();
-        int card1, card2;
-        for (int i = 0; i <= 2; i++) {
-            card1 = player[0].playACard(threeCard.get(i));
-            card2 = player[i + 1].playARandomCard();
-            player[0].receiveCard(card2);
-            player[i + 1].receiveCard(card1);
+            switch (roundcount % 4) {
+                // Vong 1:
+                case 0:
+                    
+                    //  player[0] doi bai voi player[1]
+                    player[0].receiveCard(lstThreeCards.get(1).getC1());
+                    player[0].receiveCard(lstThreeCards.get(1).getC2());
+                    player[0].receiveCard(lstThreeCards.get(1).getC3());
+                    player[1].receiveCard(lstThreeCards.get(0).getC1());
+                    player[1].receiveCard(lstThreeCards.get(0).getC2());
+                    player[1].receiveCard(lstThreeCards.get(0).getC3());
+                    
+                     // player[2] doi bai voi player[3]
+                    player[2].receiveCard(lstThreeCards.get(3).getC1());
+                    player[2].receiveCard(lstThreeCards.get(3).getC2());
+                    player[2].receiveCard(lstThreeCards.get(3).getC3());
+                    player[3].receiveCard(lstThreeCards.get(2).getC1());
+                    player[3].receiveCard(lstThreeCards.get(2).getC2());
+                    player[3].receiveCard(lstThreeCards.get(2).getC3());
+                    break;
+
+                case 1:
+                      //  player[0] doi bai voi player[3]
+                    player[0].receiveCard(lstThreeCards.get(3).getC1());
+                    player[0].receiveCard(lstThreeCards.get(3).getC2());
+                    player[0].receiveCard(lstThreeCards.get(3).getC3());
+                    player[3].receiveCard(lstThreeCards.get(0).getC1());
+                    player[3].receiveCard(lstThreeCards.get(0).getC2());
+                    player[3].receiveCard(lstThreeCards.get(0).getC3());
+                    
+                     // player[1] doi bai voi player[2]
+                    player[1].receiveCard(lstThreeCards.get(2).getC1());
+                    player[1].receiveCard(lstThreeCards.get(2).getC2());
+                    player[1].receiveCard(lstThreeCards.get(2).getC3());
+                    player[2].receiveCard(lstThreeCards.get(1).getC1());
+                    player[2].receiveCard(lstThreeCards.get(1).getC2());
+                    player[2].receiveCard(lstThreeCards.get(1).getC3());
+                    break;
+
+                case 2:
+                      //  player[0] doi bai voi player[2]
+                    player[0].receiveCard(lstThreeCards.get(2).getC1());
+                    player[0].receiveCard(lstThreeCards.get(2).getC2());
+                    player[0].receiveCard(lstThreeCards.get(2).getC3());
+                    player[2].receiveCard(lstThreeCards.get(0).getC1());
+                    player[2].receiveCard(lstThreeCards.get(0).getC2());
+                    player[2].receiveCard(lstThreeCards.get(0).getC3());
+                    
+                     // player[1] doi bai voi player[3]
+                    player[1].receiveCard(lstThreeCards.get(3).getC1());
+                    player[1].receiveCard(lstThreeCards.get(3).getC2());
+                    player[1].receiveCard(lstThreeCards.get(3).getC3());
+                    player[3].receiveCard(lstThreeCards.get(1).getC1());
+                    player[3].receiveCard(lstThreeCards.get(1).getC2());
+                    player[3].receiveCard(lstThreeCards.get(1).getC3());
+                    break;
+
+                case 3:
+                    // Khong doi
+                    break;
+            }
+
+            threeCard.clear();
+            player[0].sort();
+            for (int i = 0; i <= 2; i++) {
+                player[i + 1].sort();
+            }
+
         }
-        threeCard.clear();
-        player[0].sort();
-        for (int i = 0; i <= 2; i++) {
-            player[i + 1].sort();
-        }
-
-
         FindFirstPlay();
         if (currentTurn != 0) {
             // Computer di 2 chuon
