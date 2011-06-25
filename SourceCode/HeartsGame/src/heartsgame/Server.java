@@ -5,6 +5,7 @@
 package heartsgame;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -22,11 +23,13 @@ public class Server implements Runnable{
     private int clientCount = 0;
     private Vector<String> message;
     GameControl gameControl;
-     
+    private InetAddress ipAddress;
     public Server(int port, final GameControl gControl) {
         try {
             System.out.println("Binding to port " + port + ", please wait  ...");
-            server = new ServerSocket(port);
+            ipAddress =InetAddress.getLocalHost();
+            //server = new ServerSocket(port);
+            server = new ServerSocket(port,0, getIpAddress());
             System.out.println("Server started: " + server);
             gameControl = gControl;
             start();
@@ -122,10 +125,16 @@ public class Server implements Runnable{
     }
 
     public synchronized void handle(int ID, String input) {
+        System.out.println("Client send : " + input);
         if (input.equals(".bye")) {
             getClients()[findClient(ID)].send(".bye");
             remove(ID);
-        } else {
+        }
+        else if(input.equals("test")) {
+            getClients()[findClient(ID)].send(".bye");
+            remove(ID);
+        }
+        else {
             gameControl.HaveMessageFromClient(input);          
         }
     }
@@ -140,7 +149,7 @@ public class Server implements Runnable{
                     getClients()[i - 1] = getClients()[i];
                 }
             }
-            setClientCount(getClientCount() - 1);
+            clientCount --;
             try {
                 toTerminate.close();
             } catch (IOException ioe) {
@@ -157,7 +166,7 @@ public class Server implements Runnable{
             try {
                 getClients()[getClientCount()].open();
                 getClients()[getClientCount()].start();
-                setClientCount(getClientCount() + 1);
+                clientCount ++;
             } catch (IOException ioe) {
                 System.out.println("Error opening thread: " + ioe);
             }
@@ -199,6 +208,20 @@ public class Server implements Runnable{
      */
     public void setClients(ServerThread[] clients) {
         this.clients = clients;
+    }
+
+    /**
+     * @return the ipAddress
+     */
+    public InetAddress getIpAddress() {
+        return ipAddress;
+    }
+
+    /**
+     * @param ipAddress the ipAddress to set
+     */
+    public void setIpAddress(InetAddress ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
 

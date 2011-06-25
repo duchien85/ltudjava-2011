@@ -4,6 +4,8 @@
  */
 package heartsgame;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
@@ -57,6 +59,14 @@ public class GameStateWait extends GameState {
             }
         });
         gui.container.add(btnWait,0);
+        if (gameControl.getType() == GameDef.IS_SERVER){
+            JLabel ip = new JLabel();
+            ip.setForeground(Color.white);
+            ip.setText("Server name : " + gameControl.getServer().getIpAddress().toString());
+            ip.setBounds(280, 250, 250, 20);
+            gui.container.add(ip,0);
+        }
+
         gui.repaint();
     }
     @Override
