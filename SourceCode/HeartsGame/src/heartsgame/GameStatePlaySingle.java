@@ -89,12 +89,13 @@ public class GameStatePlaySingle extends GameStatePlay  {
         if(playState == GameDef.GAME_PLAY_START){
             btnCommand.setEnabled(false);
             divideCard();
-//            SendDataCardToClient();
             System.out.println("Switch to Game Exchange !!! ");
-            if (roundcount % 4 != 1)
+            if (roundcount % 4 != 3)
                 playState = GameDef.GAME_PLAY_EXCHANGE;
-            else
+            else {
                 endExchange = true;
+                playState = GameDef.GAME_PLAY_PLAYING;
+            }
         }
 
         else if(playState == GameDef.GAME_PLAY_EXCHANGE){
