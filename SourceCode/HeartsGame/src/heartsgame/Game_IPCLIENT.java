@@ -52,7 +52,7 @@ public class Game_IPCLIENT extends GameState {
         } catch (UnknownHostException ex) {
             Logger.getLogger(Game_IPCLIENT.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(lc!=null)
+        if(lc!=null && !lc.equals("127.0.0."))
             textip.setText(lc);
         else
             textip.setText("127.0.0.1");

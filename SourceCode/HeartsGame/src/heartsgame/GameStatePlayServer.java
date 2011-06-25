@@ -7,6 +7,8 @@ package heartsgame;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -202,22 +204,26 @@ public class GameStatePlayServer extends GameStatePlay {
             int winCard = check4cardwin();
             for (int i=0; i< 4; i++){
                 if(fourCard.get(i)==winCard){                    
-                    firstturn = (firstturn+i)%4;
-                    player[firstturn].add4scorecard(fourCard);
-                    updateScore();
-                    
-                    String score = "";
-                    for(int index=0; index<4;index++){
-                        score+="score" + player[index].getScore();
+                    try {
+                        firstturn = (firstturn + i) % 4;
+                        player[firstturn].add4scorecard(fourCard);
+                        updateScore();
+                        String score = "";
+                        for (int index = 0; index < 4; index++) {
+                            score += "score" + player[index].getScore();
+                        }
+                        Thread.sleep(1000);
+                        gameControl.getServer().SendToAllClient(score);
+                        currentTurn = firstturn;
+                        if (firstturn == 0) {
+                            this.notice("Wait for you play ...");
+                        } else {
+                            this.notice("Wait for player " + (firstturn + 1) + " play ...");
+                        }
+                        break;
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(GameStatePlayServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    gameControl.getServer().SendToAllClient(score);
-
-                    currentTurn = firstturn;
-                    if (firstturn==0)
-                        this.notice("Wait for you play ...");
-                    else
-                        this.notice("Wait for player " + (firstturn + 1) + " play ...");
-                    break;
                 }
             }
             roundcount++;

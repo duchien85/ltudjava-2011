@@ -4,11 +4,8 @@
  */
 package heartsgame;
 
-import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
-import javax.sound.sampled.*;
 import java.io.*;
 
-import java.applet.AudioClip;
 import java.awt.event.*;
 import java.io.InputStream;
 import java.net.URL;

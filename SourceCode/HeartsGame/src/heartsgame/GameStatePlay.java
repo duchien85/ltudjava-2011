@@ -6,6 +6,7 @@ package heartsgame;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Rectangle;
 import java.awt.event.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -339,7 +340,8 @@ public class GameStatePlay extends GameState {
     }
 
     protected void disableButton() {
-        btnCommand.setEnabled(false);
+        if (btnCommand!=null)
+            btnCommand.setEnabled(false);
     }
 
     protected void updateScore() {
@@ -455,7 +457,7 @@ public class GameStatePlay extends GameState {
                 case 5:
                     x = (GameDef.WIDTH - khoangcach * fourCard.size() - GameDef.CARD_WIDTH) / 2;
                     for (int i = 0; i < jls.size(); i++) {
-                        jls.get(i).setBounds(x, 220, 100, 135);
+                        jls.get(i).setBounds(place((firstturn+i)%4));
                         x += khoangcach;
                         gui.container.add(jls.get(i), 6);
                     }
@@ -706,5 +708,19 @@ public class GameStatePlay extends GameState {
 
         bChuaDi2chuon = false;
         duocChonCo = false;
+    }
+    private Rectangle place(int player){
+        int x = (GameDef.WIDTH  - GameDef.CARD_WIDTH) / 2;
+        switch(player){
+            case 0:
+                return new Rectangle(x, 250, 100, 135);
+            case 1:
+                return new Rectangle(x+30, 230, 100, 135);
+            case 2:
+                return new Rectangle(x, 200, 100, 135);
+            case 3:
+                return new Rectangle(x-30, 230, 100, 135);
+        }
+        return null;
     }
 }

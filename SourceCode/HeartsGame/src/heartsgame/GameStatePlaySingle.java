@@ -3,8 +3,6 @@ package heartsgame;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class GameStatePlaySingle extends GameStatePlay  {
 
@@ -88,7 +86,8 @@ public class GameStatePlaySingle extends GameStatePlay  {
     
     @Override
     public void Update(){
-        if(playState == GameDef.GAME_PLAY_START){            
+        if(playState == GameDef.GAME_PLAY_START){
+            disableButton();
             divideCard();
             System.out.println("Switch to Game Exchange !!! ");
             if (stateCount % 4 != 3)
