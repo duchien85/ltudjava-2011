@@ -242,6 +242,15 @@ public class Player {
         }
         return false ;
     }
+    
+    // Kiem tra dsBai co toan bo la co hay Qbich
+    public boolean checkHaveAll(){
+        for (int i = 0; i < dsBai.size(); ++i)
+            if (dsBai.get(i) != GameDef.ISQBICH && Card.getType(dsBai.get(i)) != GameDef.CHAT_CO)
+                return false;
+        
+        return true;
+    }
 
     public int playARandomCard() {
         SecureRandom numGenerate = new SecureRandom();
@@ -264,7 +273,11 @@ public class Player {
           SecureRandom numGenerate = new SecureRandom();
         int random = 0;
 
-        // 41 : Q bich
+        if (checkHaveAll()){
+            return playACard(getListCard().get(numGenerate.nextInt(getListCard().size() - 1)));
+        }
+        
+        
         while (((getListCard().get(random) == GameDef.ISQBICH)  || Card.getType(getListCard().get(random)) == GameDef.CHAT_CO)
                 && (!duocChonCo)) {
             if (getListCard().size() == 1)
@@ -278,6 +291,8 @@ public class Player {
         }
         return playACard(getListCard().get(random));
     }
+    
+    
     
     public int playfollow(int id) {
            ArrayList<Integer> samerank = new ArrayList<Integer>();

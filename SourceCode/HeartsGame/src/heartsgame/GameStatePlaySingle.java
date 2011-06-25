@@ -155,6 +155,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 btnCommand.setVisible(true);
                 btnCommand.setEnabled(true);
                 btnCommand.setText("Exchange");
+                roundcount = 0;
                 stateCount++;
             }
             
@@ -252,7 +253,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 lstThreeCards.add(_3cards);
             }
 
-            switch (roundcount % 4) {
+            switch (stateCount % 4) {
                 // Vong 1:
                 case 0:
                     
