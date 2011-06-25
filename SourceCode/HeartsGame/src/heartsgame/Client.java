@@ -90,6 +90,7 @@ public class Client implements Runnable {
 
     // dung tien trinh
     public void stop() {
+        isConnected = false;
         if (thread != null) {
             thread.stop();
             thread = null;
@@ -122,14 +123,4 @@ public class Client implements Runnable {
     public void setStreamIn(DataInputStream streamIn) {
         this.streamIn = streamIn;
     }
-
-/*
-    public static void main(String args[]) {
-        Client client = null;
-
-        client = new Client("127.0.0.1", 8999);
-
-    }
- 
- */
 }
