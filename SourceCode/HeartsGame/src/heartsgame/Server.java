@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -70,9 +72,17 @@ public class Server implements Runnable{
     }
 
     public void stop() {
-        if (thread != null) {
-            thread.stop();
-            thread = null;
+        try {
+            isConnect = false;
+            if (thread != null) {
+                thread.stop();
+                thread = null;
+            }
+            if (server != null) {
+                server.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

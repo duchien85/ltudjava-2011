@@ -4,6 +4,8 @@
  */
 package heartsgame;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author kydrenw
@@ -53,6 +55,30 @@ public final class GameControl implements Runnable {
 
     public void run() {
         while (true) {
+            if (this.type == GameDef.IS_SERVER){
+                if((currentState == GameDef.GAME_PLAY)&& (this.getServer().getClientCount()<3)){
+                    final JOptionPane jop = new JOptionPane("Notice");
+                    jop.setBounds(300, 300, 300, 300);
+                    jop.showMessageDialog(jop, "Not enought 4 player. Will end game ... ");
+                    try {
+                        this.getServer().SendToAllClient("exit");
+                        this.getServer().stop();
+                    }catch (Exception ex){}
+
+                    SwitchState(GameDef.GAME_MENU);
+                }
+            }
+            else if (this.type == GameDef.IS_CLIENT){
+                if((currentState == GameDef.GAME_PLAY) && (this.getClient().isConnected == false)){
+                    //final JOptionPane jop = new JOptionPane("Notice");
+                    //jop.setBounds(300, 300, 300, 300);
+                    //jop.showMessageDialog(jop, "Server is exited game... ");
+                    try{
+                        this.getClient().stop();
+                    }catch(Exception ex){}
+                    SwitchState(GameDef.GAME_MENU);
+                }
+            }
             gameState[currentState].Update();
              try {
                 thread.sleep(100);

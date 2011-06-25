@@ -57,6 +57,7 @@ public class GameStateWait extends GameState {
             }
         });
         gui.container.add(btnWait,0);
+
         if (gameControl.getType() == GameDef.IS_SERVER){
             JLabel ip = new JLabel();
             ip.setForeground(Color.white);
@@ -64,6 +65,23 @@ public class GameStateWait extends GameState {
             ip.setBounds(280, 250, 250, 30);
             gui.container.add(ip,0);
         }
+
+        // them button Back to Menu
+        JButton btnAbout = new JButton("Back to Menu");
+        btnAbout.setBounds(330, 280, 150, 30);
+        btnAbout.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+                if(gameControl.getType()==GameDef.IS_CLIENT)
+                    gameControl.getClient().stop();
+                else if(gameControl.getType() == GameDef.IS_SERVER){
+                    gameControl.getServer().SendToAllClient("exit");
+                    gameControl.getServer().stop();
+                }
+                gameControl.SwitchState(GameDef.GAME_MENU);
+            }
+        });
+        gui.container.add(btnAbout,0);
 
         gui.repaint();
     }

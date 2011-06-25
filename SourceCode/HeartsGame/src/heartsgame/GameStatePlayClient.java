@@ -6,6 +6,7 @@
 package heartsgame;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -112,9 +113,17 @@ public class GameStatePlayClient extends GameStatePlay {
             }
             updateScore();
         }
-        else if (msg.startsWith("endround"))
-        {
+        else if (msg.startsWith("endround")){
             processEndRound();
+        }
+        else if (msg.startsWith("exit")){
+            final JOptionPane jop = new JOptionPane("Notice");
+            jop.setBounds(300, 300, 300, 300);
+            jop.showMessageDialog(jop, "Server is exited game... ");
+            try{
+                gameControl.getClient().stop();
+            }catch(Exception ex){}
+            gameControl.SwitchState(GameDef.GAME_MENU);
         }
     }
 }
