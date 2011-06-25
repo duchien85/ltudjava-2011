@@ -378,7 +378,7 @@ public class GameStatePlay extends GameState {
                     }
 
                     public void mouseEntered(MouseEvent e) {
-                         GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                        GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
                         InputStream stream = new ByteArrayInputStream(sound.getSamples());
                         sound.play(stream);
 

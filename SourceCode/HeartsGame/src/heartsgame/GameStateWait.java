@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
+import java.io.*;
 
 /**
  *
@@ -82,6 +83,32 @@ public class GameStateWait extends GameState {
             }
         });
         gui.container.add(btnAbout,0);
+
+        btnAbout.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         gui.repaint();
     }
