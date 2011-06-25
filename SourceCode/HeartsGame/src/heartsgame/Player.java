@@ -15,14 +15,14 @@ class CardComparator implements Comparator<Integer> {
         int rank2 = IDcard2/4 + 1;
 
         if (type1 > type2) {
-            return 1;
-        } else if (type1 < type2) {
             return -1;
+        } else if (type1 < type2) {
+            return 1;
         } else {
             if (rank1 > rank2) {
-                return 1;
-            } else if (rank1 < rank2) {
                 return -1;
+            } else if (rank1 < rank2) {
+                return 1;
             } else {
                 return 0;
             }
@@ -273,8 +273,10 @@ public class Player {
           SecureRandom numGenerate = new SecureRandom();
         int random = 0;
 
-        if (checkHaveAll()){
-            return playACard(getListCard().get(numGenerate.nextInt(getListCard().size() - 1)));
+        // Neu bai ko co nuoc nao khac ngoai Co va Q bich
+        if (checkHaveAll()){            
+            return  (getListCard().size() == 1 ?
+                    playACard(getListCard().get(0)) : playACard(getListCard().get(numGenerate.nextInt(getListCard().size() - 1))));
         }
         
         
