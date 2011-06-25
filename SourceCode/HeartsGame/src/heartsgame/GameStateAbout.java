@@ -6,15 +6,22 @@ package heartsgame;
 
 import java.awt.Color;
 import java.awt.event.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
-import  java.io.*;
+
 
 /**
  *
      * @author kydrenw
      */
 public class GameStateAbout extends GameState {
+    
+    Clip clip = null;
 
     GameStateAbout(final GameControl gameControl, final GUI gui) {
         this.gameControl = gameControl;
@@ -29,33 +36,18 @@ public class GameStateAbout extends GameState {
         JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
+        
+        URL soundLocation = getClass().getResource("sound/H2O.wav");
+        try {
+            clip = AudioSystem.getClip();
 
-        bg.addMouseListener(new MouseListener() {
-
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
-                InputStream stream = new ByteArrayInputStream(sound.getSamples());
-                sound.play(stream);
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-
+            AudioInputStream inputStream = AudioSystem.getAudioInputStream(soundLocation);
+            clip.open(inputStream);
+            clip.loop(20);
+            clip.start();
+        } catch (Exception ex) {
+        }
+        gui.container.add(bg);
 
         JLabel lblAbout = new JLabel("Game Hearts version 1.0");
         lblAbout.setBounds(330, 80, 150, 20);
@@ -68,38 +60,12 @@ public class GameStateAbout extends GameState {
         btnAbout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
+                if (clip != null)
+                    clip.stop();
                 gameControl.SwitchState(GameDef.GAME_MENU);
             }
         });
-        gui.container.add(btnAbout,0);
-
-        btnAbout.addMouseListener(new MouseListener() {
-
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
-                InputStream stream = new ByteArrayInputStream(sound.getSamples());
-                sound.play(stream);
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-
-
-
+        gui.container.add(btnAbout,0);    
         gui.repaint();
     }
 }
