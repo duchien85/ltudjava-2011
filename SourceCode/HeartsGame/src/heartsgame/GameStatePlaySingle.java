@@ -95,6 +95,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
             else {
                 endExchange = true;
                 playState = GameDef.GAME_PLAY_PLAYING;
+                btnCommand.setVisible(false);
             }
         }
 

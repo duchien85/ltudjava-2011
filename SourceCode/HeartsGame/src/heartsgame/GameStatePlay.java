@@ -42,10 +42,9 @@ public class GameStatePlay extends GameState {
     protected int roundcount = 0;
     protected int stateCount = 0;
     protected int numGame = 1;
-    
     private ActionListener lst;
     private JRadioButtonMenuItem _win, _linux, _java;
-    
+
     public GameStatePlay() {
     }
 
@@ -60,9 +59,9 @@ public class GameStatePlay extends GameState {
 
         gui.container.removeAll();
         URL path = getClass().getResource("52card/1169_Nature1.jpg");
-        JLabel bg= new JLabel(new ImageIcon(path));
-        bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
-        gui.container.add(bg,0);    
+        JLabel bg = new JLabel(new ImageIcon(path));
+        bg.setBounds(gui.container.getX(), gui.container.getX(), gui.container.getWidth(), gui.container.getHeight());
+        gui.container.add(bg, 0);
 
 
         // button Enchange
@@ -79,31 +78,7 @@ public class GameStatePlay extends GameState {
         });
         gui.container.add(btnCommand, 0);
 
-        btnCommand.addMouseListener(new MouseListener() {
 
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
-                InputStream stream = new ByteArrayInputStream(sound.getSamples());
-                sound.play(stream);
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
 
         // tao notice o duoi
         note = new JLabel("This is the help !!!");
@@ -128,7 +103,7 @@ public class GameStatePlay extends GameState {
         score[2].setBounds(350, 6, 100, 30);
         score[1].setBounds(700, 500, 100, 30);
         score[0].setBounds(350, 360, 100, 30);
-        
+
 //       
 //        JCheckBox cbBackground = new JCheckBox("Background", true);
 //        cbBackground.setBounds(gui.container.getX() + 10, gui.container.getY() + 20,
@@ -217,15 +192,48 @@ public class GameStatePlay extends GameState {
                     Thread.sleep(100);
                 } catch (Exception e) {
                 }
-            }
-        else if (fourCard.isEmpty()) { // server di truoc
-            if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (!duocChonCo)) {
-                this.notice("Ban khong duoc phep chon quan Co trong nuoc di nay (Heart haven't broken yet)");
-            } else {
-                if (cardClicked == GameDef.ISQBICH && (!duocChonCo)) {
-                    this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di nay (Heart haven't broken yet)");
+            } else if (fourCard.isEmpty()) { // server di truoc
+                
+                // Neu khong con nuoc nao khac ngoai nuoc co va Q bich
+                if (player[0].checkHaveAll()) {
+                    duocChonCo = true;
+                }
+                if ((Card.getType(cardClicked) == GameDef.CHAT_CO) && (!duocChonCo)) {
+                    this.notice("Ban khong duoc phep chon quan Co trong nuoc di nay (Heart haven't broken yet)");
                 } else {
+                    if (cardClicked == GameDef.ISQBICH && (!duocChonCo)) {
+                        this.notice("Ban khong duoc phep chon quan Q bich trong nuoc di nay (Heart haven't broken yet)");
+                    } else {
+                        fourCard.add(player[0].playACard(cardClicked));
+                        drawAllCard();
+
+                        if (gameControl.getType() == GameDef.IS_SERVER) {
+                            nextturn();
+                            SendDataCardToClient();
+                        } else if (gameControl.getType() == GameDef.IS_CLIENT) {
+                            SendDataCardToServer();
+                        } else // GameDef.IS_SINGLE
+                        {
+                            nextturn();
+                        }
+
+                        try {
+                            Thread.sleep(100);
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            } else if (fourCard.size() > 0) {// server di sau
+
+                if (Card.dongChat(cardClicked, fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
+
                     fourCard.add(player[0].playACard(cardClicked));
+
+                    if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
+                        duocChonCo = true;
+                        this.notice("Heart broken!!!!!");
+                        System.out.println("Heart broken!!!!!");
+                    }
                     drawAllCard();
 
                     if (gameControl.getType() == GameDef.IS_SERVER) {
@@ -233,50 +241,21 @@ public class GameStatePlay extends GameState {
                         SendDataCardToClient();
                     } else if (gameControl.getType() == GameDef.IS_CLIENT) {
                         SendDataCardToServer();
-                    } else // GameDef.IS_SINGLE
-                    {
+                    } else {
                         nextturn();
                     }
-
-                    try {
-                        Thread.sleep(100);
-                    } catch (Exception e) {
-                    }
-                }
-            }
-        } else if (fourCard.size() > 0) {// server di sau
-
-            if (Card.dongChat(cardClicked, fourCard.get(0)) || (!player[0].checkAvableRank(fourCard.get(0)))) {
-
-                fourCard.add(player[0].playACard(cardClicked));
-
-                if (Card.getType(cardClicked) == GameDef.CHAT_CO) {
-                    duocChonCo = true;
-                    this.notice("Heart broken!!!!!");
-                    System.out.println("Heart broken!!!!!");
-                }
-                drawAllCard();
-
-                if (gameControl.getType() == GameDef.IS_SERVER) {
-                    nextturn();
-                    SendDataCardToClient();
-                } else if (gameControl.getType() == GameDef.IS_CLIENT) {
-                    SendDataCardToServer();
                 } else {
-                    nextturn();
+                    this.notice("Ban phai di cung nuoc.");
                 }
-            }
-            else
-                this.notice("Ban phai di cung nuoc.");
 
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
+                try {
+                    Thread.sleep(100);
+                } catch (Exception e) {
+                }
+            } else {
+                this.notice("Ban phai di cung chat voi la dau tien");
             }
-        } else {
-            this.notice("Ban phai di cung chat voi la dau tien");
         }
-    }
     }
 
     protected void ChangeCard(String mess) {
@@ -315,8 +294,9 @@ public class GameStatePlay extends GameState {
     }
 
     protected void disableButton() {
-        if (btnCommand!=null)
+        if (btnCommand != null) {
             btnCommand.setEnabled(false);
+        }
     }
 
     protected void updateScore() {
@@ -331,10 +311,10 @@ public class GameStatePlay extends GameState {
         ArrayList<JLabel> kq = new ArrayList<JLabel>();
         ImageIcon im;
         URL path;
-        
+
         for (int i = 0; i < _player.getListCard().size(); i++) {
             if (showcard == true) {
-                path = getClass().getResource("52card/" +_player.getIDCardAt(i) + ".jpg");
+                path = getClass().getResource("52card/" + _player.getIDCardAt(i) + ".jpg");
             } else {
                 path = getClass().getResource("52card/0-1.jpg");
             }
@@ -355,10 +335,6 @@ public class GameStatePlay extends GameState {
                     }
 
                     public void mouseEntered(MouseEvent e) {
-                        GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
-                        InputStream stream = new ByteArrayInputStream(sound.getSamples());
-                        sound.play(stream);
-
                     }
 
                     public void mouseExited(MouseEvent e) {
@@ -432,7 +408,7 @@ public class GameStatePlay extends GameState {
                 case 5:
                     x = (GameDef.WIDTH - khoangcach * fourCard.size() - GameDef.CARD_WIDTH) / 2;
                     for (int i = 0; i < jls.size(); i++) {
-                        jls.get(i).setBounds(place((firstturn+i)%4));
+                        jls.get(i).setBounds(place((firstturn + i) % 4));
                         x += khoangcach;
                         gui.container.add(jls.get(i), 6);
                     }
@@ -515,7 +491,7 @@ public class GameStatePlay extends GameState {
             gameControl.getClient().SendToServer(data);
         } else if (gameControl.getType() == GameDef.IS_SINGLE) {
 
-       DoExchange();
+            DoExchange();
 
         }
     }
@@ -554,9 +530,10 @@ public class GameStatePlay extends GameState {
             disableButton();
             newRound();
         } else {
-            if (gameControl.getType() != GameDef.IS_CLIENT)
+            if (gameControl.getType() != GameDef.IS_CLIENT) {
                 showbutton("New Game");
-            
+            }
+
             if (getMinScore() == 0) {
                 notice("You WIN !!!");
             } else {
@@ -684,17 +661,18 @@ public class GameStatePlay extends GameState {
         bChuaDi2chuon = false;
         duocChonCo = false;
     }
-    private Rectangle place(int player){
-        int x = (GameDef.WIDTH  - GameDef.CARD_WIDTH) / 2;
-        switch(player){
+
+    private Rectangle place(int player) {
+        int x = (GameDef.WIDTH - GameDef.CARD_WIDTH) / 2;
+        switch (player) {
             case 0:
                 return new Rectangle(x, 250, 100, 135);
             case 1:
-                return new Rectangle(x+30, 230, 100, 135);
+                return new Rectangle(x + 30, 230, 100, 135);
             case 2:
                 return new Rectangle(x, 200, 100, 135);
             case 3:
-                return new Rectangle(x-30, 230, 100, 135);
+                return new Rectangle(x - 30, 230, 100, 135);
         }
         return null;
     }

@@ -30,31 +30,7 @@ public class GameStateInterface extends GameState {
         gui.container.add(bg);
 
 
-        bg.addMouseListener(new MouseListener() {
-
-            public void mouseClicked(MouseEvent e) {
-
-            }
-
-            public void mousePressed(MouseEvent e) {
-
-            }
-
-            public void mouseReleased(MouseEvent e) {
-
-            }
-
-            public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
-                InputStream stream = new ByteArrayInputStream(sound.getSamples());
-                sound.play(stream);
-
-            }
-
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
+  
 
 
         // them button Java
