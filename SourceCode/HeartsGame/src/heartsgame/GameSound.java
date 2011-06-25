@@ -23,8 +23,7 @@ public class GameSound {
         try {
             // open the audio input stream
             AudioInputStream stream =
-                AudioSystem.getAudioInputStream(
-                new File(filename));
+               AudioSystem.getAudioInputStream(getClass().getResource(filename));
 
             format = stream.getFormat();
 

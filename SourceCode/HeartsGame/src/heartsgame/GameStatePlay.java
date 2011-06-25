@@ -62,8 +62,7 @@ public class GameStatePlay extends GameState {
         URL path = getClass().getResource("52card/1169_Nature1.jpg");
         JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
-        gui.container.add(bg,0);
-       
+        gui.container.add(bg,0);    
 
 
         // button Enchange
