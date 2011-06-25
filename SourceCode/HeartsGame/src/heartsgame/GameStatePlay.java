@@ -55,7 +55,7 @@ public class GameStatePlay extends GameState {
         playState = GameDef.GAME_PLAY_START;
 
         gui.container.removeAll();
-        URL path = getClass().getResource("52card/bg.jpg");
+        URL path = getClass().getResource("52card/1169_Nature1.jpg");
         JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg,0);

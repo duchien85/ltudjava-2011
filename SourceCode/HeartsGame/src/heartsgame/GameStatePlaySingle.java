@@ -228,13 +228,6 @@ public class GameStatePlaySingle extends GameStatePlay  {
     protected void DoExchange() {
         if ((roundcount % 4) != 3) { // Neu khong phai round thu 4 thi bat dau doi bai
             threeCard = player[0].getThreeCard();
-//            int card1, card2;
-//            for (int i = 0; i <= 2; i++) {
-//                card1 = player[0].playACard(threeCard.get(i));
-//                card2 = player[i + 1].playARandomCard();
-//                player[0].receiveCard(card2);
-//                player[i + 1].receiveCard(card1);
-//            }
             
             // Luu mot mang cacs phan tu ThreeCard (1 ThreeCard se chua 3 la bai) cua computer1, com2, com3
             // Index 0: player[0]
@@ -400,8 +393,4 @@ public class GameStatePlaySingle extends GameStatePlay  {
         newRound();
     }
 
-//    public static void main(String[] args) {
-////        GameStatePlaySingle gameE = new GameStatePlaySingle("hehe");
-////        gameE.newRound();
-//    }
 }

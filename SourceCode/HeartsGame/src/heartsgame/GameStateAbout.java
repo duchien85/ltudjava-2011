@@ -24,19 +24,19 @@ public class GameStateAbout extends GameState {
     @Override
     public void Enter(){
         gui.container.removeAll();
-        URL path = getClass().getResource("52card/bg.jpg");
+        URL path = getClass().getResource("52card/Broken heart.png");
         JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
 
         JLabel lblAbout = new JLabel("Game Hearts version 1.0");
-        lblAbout.setBounds(330, 200, 150, 20);
+        lblAbout.setBounds(330, 80, 150, 20);
         lblAbout.setForeground(Color.white);
         gui.container.add(lblAbout,0);
 
         // them button Back to Menu
         JButton btnAbout = new JButton("Back to Menu");
-        btnAbout.setBounds(330, 250, 150, 30);
+        btnAbout.setBounds(330, 100, 150, 30);
         btnAbout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
