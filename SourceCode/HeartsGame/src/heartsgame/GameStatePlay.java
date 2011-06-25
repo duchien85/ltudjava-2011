@@ -151,7 +151,6 @@ public class GameStatePlay extends GameState {
         } else {
             this.notice("Wait to you play ...");
         }
-
     }
 
     protected void ReceiveCardPlay() {

@@ -5,7 +5,6 @@
 
 package heartsgame;
 
-import java.lang.Integer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 
@@ -221,6 +220,9 @@ public class GameStatePlayServer extends GameStatePlay {
                 }
             }
             roundcount++;
+            if (roundcount>0){
+                duocChonCo = true;
+            }
             fourCard.clear();
             gameControl.getServer().SendToAllClient("turn"+firstturn);
             drawAllCard();
