@@ -3,8 +3,8 @@
  * and open the template in the editor.
  */
 package heartsgame;
-import javax.sound.midi.*;
-import javax.swing.JOptionPane;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -34,8 +34,7 @@ public final class GameControl implements Runnable {
         gameState = new GameState[nState];
         gameState[GameDef.GAME_MENU] = new GameStateMenu(this,gui);
         gameState[GameDef.GAME_ABOUT] = new GameStateAbout(this,gui);
-        gameState[GameDef.GAME_INTERFACE] = new GameStateInterface(this, gui);
-        
+
         gameState[GameDef.GAME_IPCLIENT] = new Game_IPCLIENT(this, gui);
         gameState[GameDef.GAME_IPSERVER] = new Game_IPSERVER(this, gui);
 
@@ -55,30 +54,6 @@ public final class GameControl implements Runnable {
 
     public void run() {
         while (true) {
-            if (this.type == GameDef.IS_SERVER){
-                if((currentState == GameDef.GAME_PLAY)&& (this.getServer().getClientCount()<3)){
-                    final JOptionPane jop = new JOptionPane("Notice");
-                    jop.setBounds(300, 300, 300, 300);
-                    jop.showMessageDialog(jop, "Not enought 4 player. Will end game ... ");
-                    try {
-                        this.getServer().SendToAllClient("exit");
-                        this.getServer().stop();
-                    }catch (Exception ex){}
-
-                    SwitchState(GameDef.GAME_MENU);
-                }
-            }
-            else if (this.type == GameDef.IS_CLIENT){
-                if((currentState == GameDef.GAME_PLAY) && (this.getClient().isConnected == false)){
-                    //final JOptionPane jop = new JOptionPane("Notice");
-                    //jop.setBounds(300, 300, 300, 300);
-                    //jop.showMessageDialog(jop, "Server is exited game... ");
-                    try{
-                        this.getClient().stop();
-                    }catch(Exception ex){}
-                    SwitchState(GameDef.GAME_MENU);
-                }
-            }
             gameState[currentState].Update();
              try {
                 thread.sleep(100);
