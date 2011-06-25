@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Server implements Runnable{
 
     private ServerThread clients[] = new ServerThread[50];
-    private ServerSocket server = null;
+    public ServerSocket server = null;
     private Thread thread = null;
     private int clientCount = 0;
     public boolean isConnect ;
@@ -28,7 +28,7 @@ public class Server implements Runnable{
             System.out.println("Binding to port " + port + ", please wait  ...");
             ipAddress =InetAddress.getLocalHost();
             //server = new ServerSocket(port);
-            server = new ServerSocket(port,0, getIpAddress());
+            server = new ServerSocket(port,0, ipAddress);
             System.out.println("Server started: " + server);
             gameControl = gControl;
             start();
