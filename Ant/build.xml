@@ -24,6 +24,7 @@
   <target name="zipResource">
     <zip destfile="${jar.dir}/${ant.project.name}.jar">      
       <zipfileset dir="${src.dir}/heartsgame/52card" includes="**/*.*" prefix="heartsgame/52card"/>
+      <zipfileset dir="${src.dir}/heartsgame/sound" includes="**/*.*" prefix="heartsgame/sound"/>
     </zip>
   </target>
      
