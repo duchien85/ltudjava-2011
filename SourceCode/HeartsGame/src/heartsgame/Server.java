@@ -9,7 +9,6 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  *
@@ -21,7 +20,7 @@ public class Server implements Runnable{
     private ServerSocket server = null;
     private Thread thread = null;
     private int clientCount = 0;
-    private Vector<String> message;
+    public boolean isConnect ;
     GameControl gameControl;
     private InetAddress ipAddress;
     public Server(int port, final GameControl gControl) {
@@ -33,8 +32,11 @@ public class Server implements Runnable{
             System.out.println("Server started: " + server);
             gameControl = gControl;
             start();
+            isConnect = true;
         } catch (IOException ioe) {
+            isConnect= false;
             System.out.println("Can not bind to port " + port + ": " + ioe.getMessage());
+
         }
     }
 

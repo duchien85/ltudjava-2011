@@ -50,7 +50,7 @@ public class GameStateWait extends GameState {
 
         // them button New Game
         JButton btnWait = new JButton("Waiting other player ...");
-        btnWait.setBounds(330, 200, 150, 20);
+        btnWait.setBounds(330, 200, 150, 30);
         btnWait.setEnabled(false);
         btnWait.addActionListener(new ActionListener() {
 
@@ -63,7 +63,7 @@ public class GameStateWait extends GameState {
             JLabel ip = new JLabel();
             ip.setForeground(Color.white);
             ip.setText("Server name : " + gameControl.getServer().getIpAddress().toString());
-            ip.setBounds(280, 250, 250, 20);
+            ip.setBounds(280, 250, 250, 30);
             gui.container.add(ip,0);
         }
 

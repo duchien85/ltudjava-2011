@@ -25,6 +25,7 @@ public class Client implements Runnable {
     public Client(String serverName, int serverPort,final GameControl gControl) {
         System.out.println("Establishing connection. Please wait ...");
         try {
+
             socket = new Socket(serverName, serverPort);
             System.out.println("Connected: " + socket);
             gameControl = gControl;

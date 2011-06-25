@@ -211,14 +211,14 @@ public class Player {
     }
 
     /**
-     * @return
+     * @return dsBai
      */
     public ArrayList<Integer> getListCard() {
         return (ArrayList<Integer>) dsBai;
     }
 
     /**
-     * @param dsBai  to set
+     * @param dsBai to set
      */
     public void setHandcard(ArrayList<Integer> handcard) {
         this.dsBai = handcard;

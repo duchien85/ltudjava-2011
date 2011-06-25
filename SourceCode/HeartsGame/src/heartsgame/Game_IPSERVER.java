@@ -5,6 +5,7 @@
 
 package heartsgame;
 
+import java.awt.Color;
 import java.awt.event.*;
 
 
@@ -36,7 +37,7 @@ public class Game_IPSERVER extends GameState {
 
          // them button Back to Menu
         JButton btnBack = new JButton("Back to Menu");
-        btnBack.setBounds(350, 300, 150, 20);
+        btnBack.setBounds(350, 300, 150, 30);
         btnBack.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameControl.SwitchState(GameDef.GAME_MENU);
@@ -49,7 +50,24 @@ public class Game_IPSERVER extends GameState {
     }
 
     private void Connect(){
-        gameControl.IsServer(GameDef.DEFAULT_PORT);
-        gameControl.SwitchState(GameDef.GAME_WAIT);
+        try{
+            Server server = new Server(GameDef.DEFAULT_PORT, gameControl);
+            if (server.isConnect == true){
+                server.stop();
+                gameControl.IsServer(GameDef.DEFAULT_PORT);
+                gameControl.SwitchState(GameDef.GAME_WAIT);
+            }
+            else{
+                JLabel note = new JLabel();
+                note.setForeground(Color.white);
+                note.setText("Cannot create more than 1 game in a computer !!!");
+                note.setBounds(280, 250, 300, 30);
+                gui.container.add(note,0);
+            }
+
+        }catch(Exception ex){
+            System.out.println(ex.toString());
+        }
+        
     }
 }

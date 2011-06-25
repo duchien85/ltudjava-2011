@@ -14,14 +14,16 @@ public class GameDef {
     static int GAME_WAIT = 1;
     static int GAME_PLAY = 2;
     static int GAME_ABOUT = 3;
+    static int GAME_INTERFACE = 4;
+    static int GAME_IPCLIENT = 5;
+    static int GAME_IPSERVER = 6;
 
     static int GAME_PLAY_START = 4 ;
     static int GAME_PLAY_EXCHANGE = 5;
     static int GAME_PLAY_PLAYING = 6;
     static int GAME_PLAY_END = 7;         // ket thuc game
 
-    static int GAME_IPCLIENT = 8;
-    static int GAME_IPSERVER = 9;
+
 
 
     static int IS_SERVER = 0;
