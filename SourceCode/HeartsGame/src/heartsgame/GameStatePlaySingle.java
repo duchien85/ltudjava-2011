@@ -3,6 +3,8 @@ package heartsgame;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class GameStatePlaySingle extends GameStatePlay  {
 
@@ -86,11 +88,10 @@ public class GameStatePlaySingle extends GameStatePlay  {
     
     @Override
     public void Update(){
-        if(playState == GameDef.GAME_PLAY_START){
-            btnCommand.setEnabled(false);
+        if(playState == GameDef.GAME_PLAY_START){            
             divideCard();
             System.out.println("Switch to Game Exchange !!! ");
-            if (roundcount % 4 != 3)
+            if (stateCount % 4 != 3)
                 playState = GameDef.GAME_PLAY_EXCHANGE;
             else {
                 endExchange = true;
@@ -154,7 +155,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 btnCommand.setVisible(true);
                 btnCommand.setEnabled(true);
                 btnCommand.setText("Exchange");
-                roundcount = 0;
+                stateCount++;
             }
             
             return true;
@@ -166,10 +167,19 @@ public class GameStatePlaySingle extends GameStatePlay  {
  
 
     public void computerPlay() {
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException ex) {
+           
+        }
         while ((currentTurn != 0) && (playState == GameDef.GAME_PLAY_PLAYING)) {
             if (currentTurn == firstturn) {
-                System.out.println("Player[" + currentTurn +"] dsBai: " + player[currentTurn].getListCard());
-                fourCard.add(player[currentTurn].playfirst(duocChonCo));
+                if (roundcount != 0) {
+                    System.out.println("Player[" + currentTurn + "] dsBai: " + player[currentTurn].getListCard());
+                    fourCard.add(player[currentTurn].playfirst(duocChonCo));
+                } else {
+                    fourCard.add(player[currentTurn].play2chuon());
+                }
             } else {
                 fourCard.add(player[currentTurn].playfollow(fourCard.get(0)));
                 
@@ -226,15 +236,14 @@ public class GameStatePlaySingle extends GameStatePlay  {
     @Override
     // Hoan doi bai
     protected void DoExchange() {
-        if ((roundcount % 4) != 3) { // Neu khong phai round thu 4 thi bat dau doi bai
+        if ((stateCount % 4) != 3) { // 
             threeCard = player[0].getThreeCard();
             
             // Luu mot mang cacs phan tu ThreeCard (1 ThreeCard se chua 3 la bai) cua computer1, com2, com3
             // Index 0: player[0]
             // Index 1: player[1]
             // Index 2: player[2]
-            // Index 2: player[3]
-            
+            // Index 2: player[3]            
             lstThreeCards = new ArrayList<ThreeCard>();
             lstThreeCards.add(player[0].playThreeCard());
             for (int i = 1; i < 4; ++i) {
@@ -334,6 +343,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
 
     private void divideCard() {
         // khoi tao mang cac quan bai gia tri ban dau la 0
+        
         int[] ddau = new int[53];
         for (int i = 1; i < 53; i++) {
             ddau[i] = 0;
@@ -342,6 +352,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
         SecureRandom numGenerate = new SecureRandom();
         int tam = numGenerate.nextInt(53);
         int p = 0;
+        btnCommand.setVisible(false);
         for (int i = 1; i < 53; i++) {
             while ((tam == 0) || (ddau[tam] == 1)) {
                 tam = numGenerate.nextInt(53);
@@ -366,6 +377,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
             player[i].sort();
         }
         drawAllCard();
+        btnCommand.setVisible(true);
 
         System.out.println("Finished dicide card !!! ");
     }

@@ -37,6 +37,7 @@ public class GameStatePlay extends GameState {
     protected boolean bChuaDi2chuon = false;
     protected boolean duocChonCo = false;
     protected int roundcount = 0;
+    protected int stateCount = 0;
     protected int numGame = 1;
     
     private ActionListener lst;
@@ -479,7 +480,7 @@ public class GameStatePlay extends GameState {
             gameControl.getClient().SendToServer(data);
         } else if (gameControl.getType() == GameDef.IS_SINGLE) {
 
-            DoExchange();
+       DoExchange();
 
         }
     }

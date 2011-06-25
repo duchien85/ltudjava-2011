@@ -265,9 +265,13 @@ public class Player {
         int random = 0;
 
         // 41 : Q bich
-        while (((getListCard().get(random) == 41) || Card.getType(getListCard().get(random)) == GameDef.CHAT_CO) && (!duocChonCo)) {
+        while (((getListCard().get(random) == GameDef.ISQBICH)  || Card.getType(getListCard().get(random)) == GameDef.CHAT_CO)
+                && (!duocChonCo)) {
             if (getListCard().size() == 1)
+            {
                 random = 0;
+                duocChonCo = true;
+            }
             else
                 random = numGenerate.nextInt(getListCard().size() - 1);
             System.out.println("Random: " + random + "; Listcard at random:" + getListCard().get(random));
