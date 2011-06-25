@@ -4,8 +4,15 @@
  */
 package heartsgame;
 
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
+import javax.sound.sampled.*;
+import java.io.*;
+
+import java.applet.AudioClip;
 import java.awt.event.*;
+import java.io.InputStream;
 import java.net.URL;
+
 import javax.swing.*;
 
 /**
@@ -25,6 +32,7 @@ public class GameStateMenu extends GameState {
     public void Enter() {
         gui.container.removeAll();
         URL path = getClass().getResource("52card/bg2.jpg");
+
         JLabel bg = new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(), gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
@@ -56,26 +64,111 @@ public class GameStateMenu extends GameState {
         gui.container.add(ng,0);
          */
         // them button New Game
+
+
+
+
+
         JButton btnNewGame = new JButton("Create Game");
         btnNewGame.setBounds(330, 200, 150, 30);
+
+      
+        
         btnNewGame.addActionListener(new ActionListener() {
 
+
+
+            
             public void actionPerformed(ActionEvent e) {
                 gameControl.SwitchState(GameDef.GAME_IPSERVER);
+
+               
+
+
             }
         });
         gui.container.add(btnNewGame, 0);
 
+        btnNewGame.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+               
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+             
+             GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+
+
+             InputStream stream = new ByteArrayInputStream(sound.getSamples());
+
+
+             sound.play(stream);
+
+
+                
+            }
+
+            public void mouseExited(MouseEvent e) {
+                
+            }
+        });
+
+
         // them button Connect to Game
         JButton btnConnect = new JButton("Join to Game");
         btnConnect.setBounds(330, 230, 150, 30);
+
+       
+
         btnConnect.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {;
                     gameControl.SwitchState(GameDef.GAME_IPCLIENT);
+                    
             }
         });
         gui.container.add(btnConnect, 0);
+
+        btnConnect.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+
+
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+
+
+                sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
 
         // them button Single player
 
@@ -92,6 +185,33 @@ public class GameStateMenu extends GameState {
 
         gui.container.add(btnSinglePlayer, 0);
 
+
+        btnSinglePlayer.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                 GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                 InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                 sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
         // them button About
         JButton btnAbout = new JButton("About");
         btnAbout.setBounds(330, 290, 150, 30);
@@ -103,6 +223,33 @@ public class GameStateMenu extends GameState {
         });
         gui.container.add(btnAbout, 0);
 
+        btnAbout.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+
         // them button About
         JButton btnInterface = new JButton("Interface");
         btnInterface.setBounds(330, 320, 150, 30);
@@ -113,6 +260,33 @@ public class GameStateMenu extends GameState {
             }
         });
         gui.container.add(btnInterface, 0);
+
+
+        btnInterface.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         gui.repaint();
     }
