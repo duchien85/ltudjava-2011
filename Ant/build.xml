@@ -31,7 +31,7 @@
 
     <target name="jar" depends="compile,zipResource">
         <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}" update="true">
+        <jar destfile="${jar.dir}/HeartsGame.jar" basedir="${classes.dir}" update="true">
             <manifest>
                 <attribute name="Main-class" value="${main-class}"/>
             </manifest>
