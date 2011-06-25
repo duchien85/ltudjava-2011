@@ -3,7 +3,6 @@
  * and open the template in the editor.
  */
 package heartsgame;
-import javax.sound.midi.*;
 import javax.swing.JOptionPane;
 
 /**
