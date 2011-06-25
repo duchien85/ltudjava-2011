@@ -49,24 +49,16 @@ public class Game_IPSERVER extends GameState {
     }
 
     private void Connect(){
-        try{
-            Server server = new Server(GameDef.DEFAULT_PORT, gameControl);
-            if (server.isConnect == true){
-                server.stop();
-                gameControl.IsServer(GameDef.DEFAULT_PORT);
-                gameControl.SwitchState(GameDef.GAME_WAIT);
-            }
-            else{
-                JLabel note = new JLabel();
-                note.setForeground(Color.white);
-                note.setText("Cannot create more than 1 game in a computer !!!");
-                note.setBounds(280, 250, 300, 30);
-                gui.container.add(note,0);
-            }
-
-        }catch(Exception ex){
-            System.out.println(ex.toString());
+        gameControl.IsServer(GameDef.DEFAULT_PORT);
+        if (gameControl.getServer().isConnect == true) {
+            gameControl.SwitchState(GameDef.GAME_WAIT);
+        } else {
+            gameControl.setType(-1);
+            JLabel note = new JLabel();
+            note.setForeground(Color.white);
+            note.setText("Cannot create more than 1 game in a computer !!!");
+            note.setBounds(280, 250, 300, 30);
+            gui.container.add(note, 0);
         }
-        
     }
 }
