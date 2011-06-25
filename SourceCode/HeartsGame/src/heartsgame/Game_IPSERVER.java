@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.event.*;
 
 
-import java.io.*;
 import java.net.URL;
 import javax.swing.*;
 

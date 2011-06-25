@@ -5,12 +5,7 @@
 package heartsgame;
 
 import java.awt.event.*;
-import java.io.IOException;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -110,7 +105,7 @@ public class GameStateMenu extends GameState {
 
         // them button About
         JButton btnInterface = new JButton("Interface");
-        btnInterface.setBounds(330, 290, 150, 30);
+        btnInterface.setBounds(330, 320, 150, 30);
         btnInterface.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {

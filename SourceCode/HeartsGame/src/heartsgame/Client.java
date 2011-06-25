@@ -6,8 +6,6 @@ package heartsgame;
 
 import java.io.*;
 import java.net.*;
-import java.net.InetAddress;
-import java.util.Vector;
 
 /**/
 // Class : Client

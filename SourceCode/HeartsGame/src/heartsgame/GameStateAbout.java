@@ -4,6 +4,7 @@
  */
 package heartsgame;
 
+import java.awt.Color;
 import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
@@ -30,6 +31,7 @@ public class GameStateAbout extends GameState {
 
         JLabel lblAbout = new JLabel("Game Hearts version 1.0");
         lblAbout.setBounds(330, 200, 150, 20);
+        lblAbout.setForeground(Color.white);
         gui.container.add(lblAbout,0);
 
         // them button Back to Menu

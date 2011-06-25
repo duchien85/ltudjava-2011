@@ -4,8 +4,6 @@
  */
 package heartsgame;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author kydrenw
