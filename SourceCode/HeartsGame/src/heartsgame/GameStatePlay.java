@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 
+import java.io.*;
+
 /**
  *
  * @author kydrenw
@@ -61,6 +63,32 @@ public class GameStatePlay extends GameState {
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg,0);
 
+        bg.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+
         // button Enchange
         btnCommand = new JButton("Exchange");
         btnCommand.setBounds(350, 330, 100, 30);
@@ -74,6 +102,32 @@ public class GameStatePlay extends GameState {
             }
         });
         gui.container.add(btnCommand, 0);
+
+        btnCommand.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         // tao notice o duoi
         note = new JLabel("This is the help !!!");
@@ -324,6 +378,10 @@ public class GameStatePlay extends GameState {
                     }
 
                     public void mouseEntered(MouseEvent e) {
+                         GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                        InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                        sound.play(stream);
+
                     }
 
                     public void mouseExited(MouseEvent e) {

@@ -7,6 +7,7 @@ package heartsgame;
 import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
+import java.io.*;
 
 /**
  *
@@ -27,6 +28,33 @@ public class GameStateInterface extends GameState {
         JLabel bg= new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
+
+
+        bg.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
 
         // them button Java

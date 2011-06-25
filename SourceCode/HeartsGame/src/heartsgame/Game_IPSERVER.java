@@ -42,6 +42,29 @@ public class Game_IPSERVER extends GameState {
                 gameControl.SwitchState(GameDef.GAME_MENU);
             }
         });
+
+        btnBack.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
         gui.container.add(btnBack,0);
         gui.repaint();
 

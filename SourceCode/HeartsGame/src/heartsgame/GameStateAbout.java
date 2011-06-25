@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.event.*;
 import java.net.URL;
 import javax.swing.*;
+import  java.io.*;
 
 /**
  *
@@ -29,6 +30,33 @@ public class GameStateAbout extends GameState {
         bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
 
+        bg.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+
+
         JLabel lblAbout = new JLabel("Game Hearts version 1.0");
         lblAbout.setBounds(330, 80, 150, 20);
         lblAbout.setForeground(Color.white);
@@ -44,6 +72,31 @@ public class GameStateAbout extends GameState {
             }
         });
         gui.container.add(btnAbout,0);
+
+        btnAbout.addMouseListener(new MouseListener() {
+
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            public void mouseEntered(MouseEvent e) {
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                InputStream stream = new ByteArrayInputStream(sound.getSamples());
+                sound.play(stream);
+            }
+
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
 
 
