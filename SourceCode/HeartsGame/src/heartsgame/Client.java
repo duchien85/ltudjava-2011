@@ -6,6 +6,7 @@ package heartsgame;
 
 import java.io.*;
 import java.net.*;
+import java.net.InetAddress;
 import java.util.Vector;
 
 /**/
@@ -20,6 +21,7 @@ public class Client implements Runnable {
     private DataInputStream streamIn = null;
     private DataOutputStream streamOut = null;
     private GameControl gameControl ;
+    public boolean isConnected;
     public Client(String serverName, int serverPort,final GameControl gControl) {
         System.out.println("Establishing connection. Please wait ...");
         try {
@@ -27,10 +29,14 @@ public class Client implements Runnable {
             System.out.println("Connected: " + socket);
             gameControl = gControl;
             start();
+            isConnected = true;
         } catch (UnknownHostException uhe) {
             System.out.println("Host unknown: " + uhe.getMessage());
+            isConnected = false;
         } catch (IOException ioe) {
             System.out.println("Unexpected exception: " + ioe.getMessage());
+            isConnected = false;
+
         }
     }
 

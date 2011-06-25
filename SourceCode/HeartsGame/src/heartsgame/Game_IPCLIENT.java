@@ -8,7 +8,6 @@ package heartsgame;
 import java.awt.event.*;
 
 
-import java.io.*;
 import java.net.URL;
 import javax.swing.*;
 
@@ -62,8 +61,16 @@ public class Game_IPCLIENT extends GameState {
                 } else {
                     final String Ip = textip.getText();
                     final int portclient = GameDef.DEFAULT_PORT;
-                    gameControl.SwitchState(GameDef.GAME_WAIT);
-                    gameControl.IsClient(Ip, portclient);                    
+                    Client testConnect = new Client(Ip, portclient, gameControl);
+                    if (testConnect.isConnected == true){
+                        testConnect.stop();
+                        gameControl.SwitchState(GameDef.GAME_WAIT);
+                        gameControl.IsClient(Ip, portclient);
+                    }
+                    else{                        
+                        jop.showMessageDialog(jop, "Không tìm thấy server !!!");
+                    }
+
                 }
             }
         });

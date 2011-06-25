@@ -136,6 +136,7 @@ public class GameStatePlay extends GameState {
         }
 
         if (player[0].getThreeCard().size() == 3) {
+            showbutton("Exchange");
             enableExchange();
         } else {
             disableButton();
@@ -505,6 +506,7 @@ public class GameStatePlay extends GameState {
 
         if (check100score() == false) {
             showbutton("New Round");
+            disableButton();
             newRound();
         } else {
             if (gameControl.getType() != GameDef.IS_CLIENT)

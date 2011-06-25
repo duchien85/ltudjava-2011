@@ -133,7 +133,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
     }
     
       
-       @Override
+    @Override
     protected void ReceiveExchange() {
         if (cardClicked != -1) { // click vao 1 la bai
             System.out.println("Click to card " + cardClicked);
@@ -153,6 +153,7 @@ public class GameStatePlaySingle extends GameStatePlay  {
         }
 
         if (player[0].getThreeCard().size() == 3) {
+            showbutton("Exchange");
             enableExchange();
         } else {
             disableButton();
