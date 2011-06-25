@@ -201,7 +201,10 @@ public class GameStatePlaySingle extends GameStatePlay  {
                nextturn();
            System.out.println("Current turn: " + currentTurn + "; Player[" + currentTurn +"] dsBai = " + player[currentTurn].getListCard().size());
            if (player[currentTurn].getListCard().isEmpty())
+           {
+               playState = GameDef.GAME_PLAY_START;
                break;
+           }
            
         }
     }
