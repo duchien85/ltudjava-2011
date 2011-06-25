@@ -24,7 +24,7 @@ public class GameStateMenu extends GameState {
     @Override
     public void Enter() {
         gui.container.removeAll();
-        URL path = getClass().getResource("52card/bg.jpg");
+        URL path = getClass().getResource("52card/bg2.jpg");
         JLabel bg = new JLabel(new ImageIcon(path));
         bg.setBounds(gui.container.getX(), gui.container.getX(), gui.container.getWidth(), gui.container.getHeight());
         gui.container.add(bg);
