@@ -33,20 +33,20 @@ public class Game_IPCLIENT extends GameState {
         gui.container.add(bg);
 
         JLabel ip = new JLabel("IP: ");
-        ip.setBounds(310, 200, 50, 20);
+        ip.setBounds(310, 200, 50, 30);
 
         final JTextField textip = new JTextField();
 
 
         textip.setText("127.0.0.1");
-        textip.setBounds(350, 200, 150, 20);      
+        textip.setBounds(350, 200, 150, 30);
 
         gui.container.add(ip,0);
         gui.container.add(textip,0);
 
         JButton btnConnect = new JButton("Connect...");
 
-        btnConnect.setBounds(400, 260, 100, 20);
+        btnConnect.setBounds(400, 260, 100, 30);
 
         final JOptionPane jop = new JOptionPane("Thông Báo");
 
@@ -77,7 +77,7 @@ public class Game_IPCLIENT extends GameState {
 
         // them button Back to Menu
         JButton btnAbout = new JButton("Back to Menu");
-        btnAbout.setBounds(350, 300, 150, 20);
+        btnAbout.setBounds(350, 300, 150, 30);
         btnAbout.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {

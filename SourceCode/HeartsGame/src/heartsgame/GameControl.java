@@ -34,7 +34,8 @@ public final class GameControl implements Runnable {
         gameState = new GameState[nState];
         gameState[GameDef.GAME_MENU] = new GameStateMenu(this,gui);
         gameState[GameDef.GAME_ABOUT] = new GameStateAbout(this,gui);
-
+        gameState[GameDef.GAME_INTERFACE] = new GameStateInterface(this, gui);
+        
         gameState[GameDef.GAME_IPCLIENT] = new Game_IPCLIENT(this, gui);
         gameState[GameDef.GAME_IPSERVER] = new Game_IPSERVER(this, gui);
 

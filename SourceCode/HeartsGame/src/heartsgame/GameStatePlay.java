@@ -38,7 +38,10 @@ public class GameStatePlay extends GameState {
     protected boolean duocChonCo = false;
     protected int roundcount = 0;
     protected int numGame = 1;
-
+    
+    private ActionListener lst;
+    private JRadioButtonMenuItem _win, _linux, _java;
+    
     public GameStatePlay() {
     }
 
@@ -52,10 +55,14 @@ public class GameStatePlay extends GameState {
         playState = GameDef.GAME_PLAY_START;
 
         gui.container.removeAll();
+        URL path = getClass().getResource("52card/bg.jpg");
+        JLabel bg= new JLabel(new ImageIcon(path));
+        bg.setBounds(gui.container.getX(), gui.container.getX(),gui.container.getWidth(), gui.container.getHeight());
+        gui.container.add(bg,0);
 
         // button Enchange
         btnCommand = new JButton("Exchange");
-        btnCommand.setBounds(350, 330, 100, 20);
+        btnCommand.setBounds(350, 330, 100, 30);
         btnCommand.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
@@ -73,8 +80,8 @@ public class GameStatePlay extends GameState {
         pn.add(note);
         pn.setBackground(Color.LIGHT_GRAY);
         pn.setBorder(new EtchedBorder(EtchedBorder.LOWERED));
-        pn.setBounds(0, 538, GameDef.WIDTH, 30);
-        gui.container.add(pn, 1);
+        pn.setBounds(0, 540, GameDef.WIDTH, 30);
+        gui.container.add(pn, 0);
 
         // hien diem so
         Font f = new Font(Font.SANS_SERIF, Font.TRUETYPE_FONT, 20);
@@ -82,7 +89,8 @@ public class GameStatePlay extends GameState {
         for (int i = 0; i <= 3; i++) {
             score[i] = new JLabel();
             score[i].setFont(f);
-            gui.container.add(score[i], i + 2);
+            score[i].setForeground(Color.WHITE);
+            gui.container.add(score[i], 0);
         }
 
         score[3].setBounds(12, 50, 100, 30);
@@ -398,8 +406,9 @@ public class GameStatePlay extends GameState {
     }
 
     protected void clear4play() {
-        while (gui.container.getComponentCount() > 6) {
-            gui.container.remove(gui.container.getComponentCount() - 1);
+        while (gui.container.getComponentCount() > 7) {
+//            gui.container.remove(gui.contain7er.getComponentCount() - 1);
+            gui.container.remove(6);
         }
     }
 
@@ -525,6 +534,7 @@ public class GameStatePlay extends GameState {
         drawAllCard();
     }
 
+    // kiem tra thang chung cuoc
     protected boolean check100score() {
         for (int i = 0; i < 4; i++) {
             if (player[i].getScore() >= 100) {
@@ -637,6 +647,5 @@ public class GameStatePlay extends GameState {
 
         bChuaDi2chuon = false;
         duocChonCo = false;
-
     }
 }
