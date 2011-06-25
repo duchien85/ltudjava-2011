@@ -507,7 +507,9 @@ public class GameStatePlay extends GameState {
             showbutton("New Round");
             newRound();
         } else {
-            showbutton("New Game");
+            if (gameControl.getType() != GameDef.IS_CLIENT)
+                showbutton("New Game");
+            
             if (getMinScore() == 0) {
                 notice("You WIN !!!");
             } else {

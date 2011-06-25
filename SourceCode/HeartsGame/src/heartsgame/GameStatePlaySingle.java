@@ -41,8 +41,9 @@ public class GameStatePlaySingle extends GameStatePlay  {
                 ReceiveExchange();
            
         } else if (playState == GameDef.GAME_PLAY_PLAYING) {
-            if (currentTurn == 0 && cardClicked != -1) {
-                ReceiveCardPlay();
+            if (cardClicked != -1) {
+                if (currentTurn == 0)
+                    ReceiveCardPlay();
                 cardClicked = -1;
             }
             checkEnd4Card();
