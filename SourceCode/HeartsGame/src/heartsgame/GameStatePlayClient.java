@@ -95,6 +95,8 @@ public class GameStatePlayClient extends GameStatePlay {
             else
                 this.notice("Wait for player " + (currentTurn+1)+ " play ....");
             roundcount++;
+            if (roundcount >1 );
+                duocChonCo = true;
             fourCard.clear();
             drawAllCard();
         }

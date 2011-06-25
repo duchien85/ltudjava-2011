@@ -79,6 +79,9 @@ public class GameStatePlaySingle extends GameStatePlay  {
                     break;
                 }
             }
+            try {
+                Thread.sleep(1500);
+            }catch (Exception ex){}
             roundcount++;
             fourCard.clear();
             drawAllCard();
