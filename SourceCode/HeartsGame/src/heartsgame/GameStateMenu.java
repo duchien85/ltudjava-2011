@@ -106,7 +106,7 @@ public class GameStateMenu extends GameState {
             public void mouseEntered(MouseEvent e) {
 
              
-             GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+             GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/bloop.wav");
 
 
              InputStream stream = new ByteArrayInputStream(sound.getSamples());
@@ -154,7 +154,7 @@ public class GameStateMenu extends GameState {
             }
 
             public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/bloop.wav");
 
 
                 InputStream stream = new ByteArrayInputStream(sound.getSamples());
@@ -201,7 +201,7 @@ public class GameStateMenu extends GameState {
             }
 
             public void mouseEntered(MouseEvent e) {
-                 GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                 GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/bloop.wav");
                  InputStream stream = new ByteArrayInputStream(sound.getSamples());
                  sound.play(stream);
 
@@ -238,7 +238,7 @@ public class GameStateMenu extends GameState {
             }
 
             public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/bloop.wav");
                 InputStream stream = new ByteArrayInputStream(sound.getSamples());
                 sound.play(stream);
 
@@ -277,7 +277,7 @@ public class GameStateMenu extends GameState {
             }
 
             public void mouseEntered(MouseEvent e) {
-                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/shot.wav");
+                GameSound sound = new GameSound("../HeartsGame/src/heartsgame/sound/bloop.wav");
                 InputStream stream = new ByteArrayInputStream(sound.getSamples());
                 sound.play(stream);
 
