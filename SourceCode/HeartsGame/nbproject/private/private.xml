@@ -1,4 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStateMenu.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/UpdateInterface.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStatePlay.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GUI.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStatePlaySingle.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStateInterface.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStateAbout.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameDef.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameControl.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStateWait.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStatePlayClient.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Game_IPCLIENT.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Game_IPSERVER.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Player.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Card.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Client.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameState.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameStatePlayServer.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/Server.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/ServerThread.java</file>
+        <file>file:/D:/baitap/3%20Lap%20trinh%20Java/04%20Heart%20Game/ltudjava-2011/SourceCode/HeartsGame/src/heartsgame/GameSound.java</file>
+    </open-files>
 </project-private>
